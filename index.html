@@ -9,7 +9,7 @@
     </script>
     <style>
         /* ================================================================
-               奶酪主题 · 强化版 · 真 · 奶酪黄
+               奶酪主题 · 纯净明亮版 · 真 · 奶酪黄
                ================================================================ */
 
         * {
@@ -20,28 +20,26 @@
 
         body {
             font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
-            /* 主背景：真正的奶酪黄 */
-            background: #F9E8C9;
+            /* 明亮奶酪黄，不再肉色 */
+            background: #FFEAA7;
             color: #5A4A3A;
-            padding: 20px;
+            padding: 16px;
             max-width: 700px;
             margin: 0 auto;
             line-height: 1.6;
             min-height: 100vh;
 
-            /* 孔洞纹理：更大、更深、更密集 */
+            /* 孔洞纹理：恰到好处的点缀 */
             background-image:
-                radial-gradient(circle at 5% 12%, rgba(200, 160, 100, 0.20) 28px, transparent 28px),
-                radial-gradient(circle at 88% 68%, rgba(200, 160, 100, 0.18) 34px, transparent 34px),
-                radial-gradient(circle at 25% 90%, rgba(200, 160, 100, 0.14) 22px, transparent 22px),
-                radial-gradient(circle at 94% 22%, rgba(200, 160, 100, 0.12) 26px, transparent 26px),
-                radial-gradient(circle at 48% 40%, rgba(200, 160, 100, 0.10) 40px, transparent 40px),
-                radial-gradient(circle at 72% 85%, rgba(200, 160, 100, 0.16) 18px, transparent 18px),
-                radial-gradient(circle at 15% 55%, rgba(200, 160, 100, 0.08) 30px, transparent 30px);
-            background-color: #F9E8C9;
+                radial-gradient(circle at 6% 15%, rgba(200, 170, 100, 0.18) 30px, transparent 30px),
+                radial-gradient(circle at 90% 70%, rgba(200, 170, 100, 0.14) 36px, transparent 36px),
+                radial-gradient(circle at 20% 92%, rgba(200, 170, 100, 0.12) 24px, transparent 24px),
+                radial-gradient(circle at 80% 20%, rgba(200, 170, 100, 0.10) 28px, transparent 28px),
+                radial-gradient(circle at 50% 50%, rgba(200, 170, 100, 0.06) 50px, transparent 50px);
+            background-color: #FFEAA7;
         }
 
-        /* ===== 顶部：标题 + 奶酪切面 ===== */
+        /* ===== 顶部 ===== */
         .app-header {
             display: flex;
             justify-content: space-between;
@@ -57,87 +55,88 @@
             gap: 10px;
         }
 
-        /* 🧀 奶酪切面（纯 CSS 立体块） */
-        .cheese-block {
+        /* 🧀 立体奶酪块（纯 CSS 3D） */
+        .cheese-cube {
             width: 52px;
             height: 44px;
-            background: linear-gradient(145deg, #F5D49A, #E8B86D);
-            border-radius: 6px 20px 6px 12px;
+            background: linear-gradient(145deg, #FFD93D, #F5C842);
+            border-radius: 6px 18px 6px 12px;
             position: relative;
-            box-shadow:
-                4px 6px 0 #C49A5A,
-                inset -2px -4px 0 rgba(180, 130, 70, 0.2),
-                inset 2px 2px 0 rgba(255, 220, 160, 0.6);
             flex-shrink: 0;
-            transform: rotate(-4deg);
+            transform: rotate(-3deg);
             transition: transform 0.3s ease;
+            box-shadow:
+                4px 6px 0 #D4A84A,
+                0 4px 12px rgba(200, 170, 80, 0.25);
         }
-        .cheese-block:hover {
+        .cheese-cube:hover {
             transform: rotate(0deg) scale(1.04);
         }
-        /* 切面顶部的孔洞 */
-        .cheese-block .hole {
+
+        /* 正面孔洞 */
+        .cheese-cube .hole {
             position: absolute;
             border-radius: 50%;
-            background: radial-gradient(circle at 40% 35%, rgba(200, 160, 100, 0.25), rgba(160, 120, 70, 0.35));
-            box-shadow: inset 2px 3px 6px rgba(120, 80, 40, 0.25);
+            background: radial-gradient(circle at 40% 35%, rgba(180, 140, 70, 0.20), rgba(150, 110, 50, 0.30));
+            box-shadow: inset 2px 3px 6px rgba(120, 80, 40, 0.20);
         }
-        .cheese-block .hole1 {
+        .cheese-cube .h1 {
             width: 14px;
             height: 12px;
             top: 8px;
             left: 10px;
-            transform: rotate(-8deg);
+            transform: rotate(-6deg);
         }
-        .cheese-block .hole2 {
+        .cheese-cube .h2 {
             width: 10px;
             height: 9px;
             bottom: 10px;
             right: 8px;
-            transform: rotate(12deg);
+            transform: rotate(10deg);
         }
-        .cheese-block .hole3 {
+        .cheese-cube .h3 {
             width: 7px;
             height: 6px;
-            top: 22px;
-            left: 28px;
+            top: 24px;
+            left: 30px;
             transform: rotate(4deg);
         }
-        /* 切面的“侧面”效果（右侧厚边） */
-        .cheese-block::after {
+
+        /* 右侧厚边（立体感） */
+        .cheese-cube::after {
             content: '';
             position: absolute;
             right: -6px;
             top: 4px;
             width: 8px;
             height: 32px;
-            background: linear-gradient(180deg, #D4A06A, #B8895A);
+            background: linear-gradient(180deg, #E8B84A, #C8983A);
             border-radius: 0 4px 4px 0;
             transform: skewY(-6deg);
-            box-shadow: inset -1px -1px 0 rgba(160, 120, 70, 0.3);
-            opacity: 0.8;
+            box-shadow: inset -1px -1px 0 rgba(160, 120, 60, 0.2);
+            opacity: 0.85;
         }
 
         .app-title {
-            font-size: 28px;
+            font-size: 26px;
             font-weight: 600;
             color: #C49A5A;
-            letter-spacing: 2px;
+            letter-spacing: 1.5px;
             display: flex;
             align-items: center;
             gap: 4px;
         }
         .app-title small {
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 400;
             color: #B8A08A;
         }
 
         .sync-badge {
-            font-size: 11px;
+            font-size: 10px;
             color: #fff;
             background: #D4A06A;
-            padding: 2px 12px;
+            padding: 2px 10px;
             border-radius: 30px;
             font-weight: 600;
             cursor: pointer;
@@ -149,7 +148,7 @@
             background: #b08a6a;
         }
         .sync-badge.syncing {
-            background: #e8b86d;
+            background: #f5c842;
             animation: pulse 1s infinite;
         }
         @keyframes pulse {
@@ -162,9 +161,10 @@
             }
         }
 
+        /* 座右铭——活泼杰瑞风格 */
         .daily-motto {
             font-size: 13px;
-            color: #B8A08A;
+            color: #A68A6A;
             background: rgba(255, 247, 232, 0.7);
             padding: 4px 16px;
             border-radius: 30px;
@@ -172,80 +172,77 @@
             font-style: italic;
             backdrop-filter: blur(4px);
             white-space: nowrap;
+            font-weight: 500;
         }
 
-        /* ===== 卡片 · 厚切奶酪 ===== */
+        /* ===== 卡片 ===== */
         .card {
-            background: #FFF7E8;
+            background: #FFFAF0;
             border-radius: 28px 28px 24px 24px;
-            padding: 18px 20px 22px 20px;
-            margin-bottom: 16px;
+            padding: 16px 18px 20px 18px;
+            margin-bottom: 14px;
             border: 1px solid #f0dcc8;
-            /* 双层阴影：厚切感 */
             box-shadow:
-                0 6px 0 #E0C8A8,
-                0 8px 24px rgba(180, 150, 100, 0.15),
+                0 4px 0 #E8D0B0,
+                0 6px 20px rgba(180, 150, 100, 0.12),
                 inset 0 1px 0 rgba(255, 255, 255, 0.8);
             position: relative;
             transition: 0.2s;
         }
-        /* 卡片内部孔洞装饰（更深） */
         .card::after {
             content: '';
             position: absolute;
-            top: 16px;
-            right: 22px;
-            width: 32px;
-            height: 24px;
+            top: 14px;
+            right: 18px;
+            width: 28px;
+            height: 20px;
             border-radius: 50%;
-            background: radial-gradient(circle at 40% 30%, rgba(200, 160, 100, 0.15), rgba(180, 140, 90, 0.25));
-            box-shadow: inset 2px 3px 8px rgba(160, 120, 70, 0.15);
+            background: radial-gradient(circle at 40% 30%, rgba(200, 170, 100, 0.12), rgba(180, 150, 90, 0.20));
+            box-shadow: inset 2px 3px 8px rgba(160, 120, 70, 0.10);
             pointer-events: none;
         }
         .card::before {
             content: '';
             position: absolute;
-            bottom: 24px;
-            left: 36px;
-            width: 20px;
-            height: 16px;
+            bottom: 20px;
+            left: 30px;
+            width: 16px;
+            height: 14px;
             border-radius: 50%;
-            background: radial-gradient(circle at 50% 40%, rgba(200, 160, 100, 0.10), rgba(180, 140, 90, 0.18));
-            box-shadow: inset 1px 2px 6px rgba(160, 120, 70, 0.12);
+            background: radial-gradient(circle at 50% 40%, rgba(200, 170, 100, 0.08), rgba(180, 150, 90, 0.14));
+            box-shadow: inset 1px 2px 6px rgba(160, 120, 70, 0.08);
             pointer-events: none;
         }
-        /* 某些卡片不需要孔洞 */
         .card.no-hole::before,
         .card.no-hole::after {
             display: none;
         }
 
-        /* 卡片标题 */
         .card-title {
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 600;
             color: #8B7A5C;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             display: flex;
             align-items: center;
             gap: 8px;
         }
         .card-title .badge {
-            font-size: 12px;
+            font-size: 11px;
             background: #f0dcc8;
             color: #7A5C3A;
-            padding: 0 12px;
+            padding: 0 10px;
             border-radius: 30px;
             font-weight: 400;
         }
 
-        /* ===== 打卡区域 ===== */
+        /* ===== 打卡 ===== */
         .checkin-area {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
             flex-wrap: wrap;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
         .checkin-grid {
             display: flex;
@@ -261,30 +258,68 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 11px;
+            font-size: 10px;
             transition: 0.2s;
             border: 1px solid #e0d0c0;
             color: #b8a08a;
+            cursor: pointer;
+            position: relative;
+        }
+        .checkin-dot:hover {
+            transform: scale(1.12);
+            z-index: 2;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
         }
         .checkin-dot.done {
-            background: #E8B86D;
-            border-color: #d4a06a;
-            color: #fff;
-            box-shadow: 0 2px 8px rgba(232, 184, 109, 0.25);
+            background: #F5C842;
+            border-color: #E8B84A;
+            color: #7A5C3A;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(245, 200, 66, 0.30);
         }
         .checkin-dot.today {
-            border: 2px solid #E8B86D;
-            box-shadow: 0 0 0 3px rgba(232, 184, 109, 0.15);
+            border: 2px solid #F5C842;
+            box-shadow: 0 0 0 3px rgba(245, 200, 66, 0.15);
         }
         .checkin-dot.milestone {
-            background: #E8B86D;
-            border-color: #d4a06a;
-            color: #fff;
-            font-size: 14px;
-            box-shadow: 0 2px 12px rgba(232, 184, 109, 0.3);
+            background: #F5C842;
+            border-color: #E8B84A;
+            color: #7A5C3A;
+            font-size: 13px;
+            box-shadow: 0 2px 12px rgba(245, 200, 66, 0.35);
         }
         .checkin-dot.future {
-            opacity: 0.35;
+            opacity: 0.30;
+            cursor: default;
+        }
+        .checkin-dot.future:hover {
+            transform: none;
+            box-shadow: none;
+        }
+        /* 点击查看当天的气泡提示 */
+        .checkin-dot .day-tooltip {
+            display: none;
+            position: absolute;
+            bottom: 32px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #FFFDF5;
+            border: 1px solid #f0dcc8;
+            border-radius: 12px;
+            padding: 8px 12px;
+            font-size: 11px;
+            color: #5A4A3A;
+            white-space: nowrap;
+            max-width: 200px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.10);
+            z-index: 10;
+            font-weight: 400;
+            pointer-events: none;
+        }
+        .checkin-dot:hover .day-tooltip {
+            display: block;
         }
 
         .checkin-stats {
@@ -297,12 +332,12 @@
         }
         .checkin-stats .streak {
             font-weight: 700;
-            color: #E8B86D;
+            color: #E8B84A;
             font-size: 18px;
         }
         .milestone-badge {
             display: inline-block;
-            font-size: 18px;
+            font-size: 16px;
             margin-left: 4px;
         }
 
@@ -314,19 +349,19 @@
             flex-wrap: wrap;
         }
         .countdown-number {
-            font-size: 40px;
+            font-size: 38px;
             font-weight: 700;
-            color: #E8B86D;
+            color: #E8B84A;
             line-height: 1.2;
-            text-shadow: 0 2px 8px rgba(232, 184, 109, 0.15);
+            text-shadow: 0 2px 8px rgba(232, 184, 74, 0.15);
         }
         .countdown-label {
-            font-size: 15px;
+            font-size: 14px;
             color: #B8A08A;
         }
         .countdown-status {
-            font-size: 14px;
-            padding: 2px 14px;
+            font-size: 13px;
+            padding: 2px 12px;
             border-radius: 30px;
             background: #f0e6d8;
             color: #8B7A5C;
@@ -336,7 +371,7 @@
             color: #7A5C3A;
         }
         .countdown-status.danger {
-            background: #E8B86D;
+            background: #F5C842;
             color: #FFFDF5;
         }
 
@@ -362,15 +397,15 @@
         }
         .input-row input:focus,
         .input-row select:focus {
-            border-color: #E8B86D;
-            box-shadow: 0 0 0 4px rgba(232, 184, 109, 0.12);
+            border-color: #F5C842;
+            box-shadow: 0 0 0 4px rgba(245, 200, 66, 0.12);
         }
 
         .btn {
-            padding: 10px 22px;
+            padding: 10px 20px;
             border: none;
             border-radius: 40px;
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 500;
             cursor: pointer;
             transition: 0.2s;
@@ -380,15 +415,15 @@
         .btn:hover {
             background: #e8c8b0;
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(180, 150, 100, 0.15);
+            box-shadow: 0 4px 12px rgba(180, 150, 100, 0.12);
         }
         .btn-primary {
-            background: #E8B86D;
-            color: #FFFDF5;
-            box-shadow: 0 4px 12px rgba(232, 184, 109, 0.25);
+            background: #F5C842;
+            color: #5A4A3A;
+            box-shadow: 0 4px 12px rgba(245, 200, 66, 0.25);
         }
         .btn-primary:hover {
-            background: #d4a06a;
+            background: #E8B84A;
             transform: translateY(-2px);
         }
         .btn-danger {
@@ -403,7 +438,7 @@
         }
         .btn-sm {
             padding: 5px 14px;
-            font-size: 13px;
+            font-size: 12px;
         }
         .btn-outline {
             background: transparent;
@@ -446,16 +481,16 @@
         .analysis-box {
             background: #fcf3e3;
             border-radius: 14px;
-            padding: 12px 16px;
+            padding: 10px 16px;
             margin-top: 10px;
             font-size: 14px;
-            border-left: 4px solid #E8B86D;
+            border-left: 4px solid #F5C842;
         }
         .analysis-box.good {
             border-left-color: #7EB87A;
         }
         .analysis-box.warn {
-            border-left-color: #e8b86d;
+            border-left-color: #f5c842;
         }
 
         /* ===== 模态框 ===== */
@@ -466,7 +501,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(90, 74, 58, 0.35);
+            background: rgba(90, 74, 58, 0.30);
             backdrop-filter: blur(3px);
             justify-content: center;
             align-items: center;
@@ -482,7 +517,7 @@
             max-width: 480px;
             width: 100%;
             padding: 28px 24px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.10);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
             max-height: 90vh;
             overflow-y: auto;
             position: relative;
@@ -504,7 +539,7 @@
         .modal-title {
             font-size: 20px;
             font-weight: 600;
-            color: #E8B86D;
+            color: #E8B84A;
             margin-bottom: 6px;
         }
         .modal-sub {
@@ -531,12 +566,12 @@
         }
         .mood-btn-group button:hover {
             background: #f0dcc8;
-            border-color: #E8B86D;
+            border-color: #F5C842;
         }
         .mood-btn-group button.selected {
-            background: #E8B86D;
-            border-color: #E8B86D;
-            color: #FFFDF5;
+            background: #F5C842;
+            border-color: #F5C842;
+            color: #5A4A3A;
         }
         .ai-reply-box {
             background: #fcf3e3;
@@ -576,7 +611,7 @@
             margin-right: 10px;
         }
         .video-item .v-link {
-            color: #E8B86D;
+            color: #E8B84A;
             text-decoration: none;
             font-weight: 500;
             font-size: 13px;
@@ -588,6 +623,7 @@
             cursor: pointer;
             color: #B8A08A;
             margin-left: 6px;
+            font-size: 14px;
         }
         .video-item .del-video:hover {
             color: #c0392b;
@@ -623,8 +659,8 @@
             margin-top: 8px;
         }
         .footer-actions .btn {
-            font-size: 13px;
-            padding: 6px 16px;
+            font-size: 12px;
+            padding: 6px 14px;
         }
 
         .cloud-actions {
@@ -655,7 +691,7 @@
             background: #b08a6a;
         }
         .cloud-status .dot.syncing {
-            background: #e8b86d;
+            background: #f5c842;
             animation: pulse 1s infinite;
         }
 
@@ -721,29 +757,29 @@
             .app-title {
                 font-size: 22px;
             }
-            .cheese-block {
+            .cheese-cube {
                 width: 40px;
                 height: 34px;
             }
-            .cheese-block .hole1 {
+            .cheese-cube .h1 {
                 width: 10px;
                 height: 9px;
                 top: 6px;
                 left: 8px;
             }
-            .cheese-block .hole2 {
+            .cheese-cube .h2 {
                 width: 7px;
                 height: 6px;
                 bottom: 8px;
                 right: 6px;
             }
-            .cheese-block .hole3 {
+            .cheese-cube .h3 {
                 width: 5px;
                 height: 4px;
                 top: 18px;
                 left: 20px;
             }
-            .cheese-block::after {
+            .cheese-cube::after {
                 right: -5px;
                 top: 3px;
                 width: 6px;
@@ -766,7 +802,7 @@
             .checkin-dot {
                 width: 24px;
                 height: 24px;
-                font-size: 10px;
+                font-size: 9px;
             }
             .card::after,
             .card::before {
@@ -796,30 +832,115 @@
             width: 4px;
         }
         ::-webkit-scrollbar-track {
-            background: #f9e8c9;
+            background: #ffeaa7;
         }
         ::-webkit-scrollbar-thumb {
             background: #f0dcc8;
             border-radius: 10px;
         }
+
+        /* ===== 打卡详情弹窗（点击日期查看当天记录） ===== */
+        .day-detail-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(90, 74, 58, 0.25);
+            backdrop-filter: blur(3px);
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+            padding: 20px;
+        }
+        .day-detail-overlay.active {
+            display: flex;
+        }
+        .day-detail-box {
+            background: #FFFDF5;
+            border-radius: 28px;
+            max-width: 420px;
+            width: 100%;
+            padding: 28px 24px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            border: 1px solid #f0dcc8;
+        }
+        .day-detail-box .close-btn {
+            position: absolute;
+            top: 12px;
+            right: 18px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #B8A08A;
+            background: none;
+            border: none;
+        }
+        .day-detail-box .close-btn:hover {
+            color: #5A4A3A;
+        }
+        .day-detail-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #E8B84A;
+            margin-bottom: 4px;
+        }
+        .day-detail-sub {
+            font-size: 13px;
+            color: #B8A08A;
+            margin-bottom: 12px;
+        }
+        .day-detail-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .day-detail-list li {
+            padding: 6px 0;
+            border-bottom: 1px dashed #f0e6d8;
+            font-size: 14px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .day-detail-list .empty-msg {
+            color: #B8A08A;
+            font-style: italic;
+            text-align: center;
+            padding: 16px 0;
+        }
+        .day-detail-list .food-time {
+            color: #B8A08A;
+            font-size: 12px;
+        }
+        .day-detail-list .food-tag-sm {
+            font-size: 11px;
+            background: #f0dcc8;
+            padding: 0 10px;
+            border-radius: 30px;
+            color: #7A5C3A;
+        }
     </style>
 </head>
 <body>
 
-    <!-- ===== 顶部：标题 + 奶酪切面 ===== -->
+    <!-- ===== 顶部 ===== -->
     <div class="app-header">
         <div class="title-group">
-            <div class="cheese-block">
-                <div class="hole hole1"></div>
-                <div class="hole hole2"></div>
-                <div class="hole hole3"></div>
+            <!-- 立体奶酪块 -->
+            <div class="cheese-cube">
+                <div class="hole h1"></div>
+                <div class="hole h2"></div>
+                <div class="hole h3"></div>
             </div>
             <div class="app-title">
                 Slowly <small>· 慢慢食光</small>
                 <span class="sync-badge" id="syncBadge">☁️ 云端</span>
             </div>
         </div>
-        <div class="daily-motto" id="dailyMotto">🌱 今天也慢慢来，好不好？</div>
+        <div class="daily-motto" id="dailyMotto">🧀 杰瑞说：慢慢吃，慢慢瘦</div>
     </div>
 
     <!-- ===== 打卡 + 里程碑 ===== -->
@@ -835,8 +956,8 @@
                 连续 <span class="streak" id="streakCount">0</span> 天
             </div>
         </div>
-        <div style="font-size:12px;color:#B8A08A;margin-top:4px;">
-            🧀 每天记录食物即打卡 · 7天⭐ 30天🌟 180天❤️ 365天👑
+        <div style="font-size:11px;color:#B8A08A;margin-top:4px;">
+            🧀 点击日期查看当天记录 · 7天⭐ 30天🌟 180天❤️ 365天👑
         </div>
     </div>
 
@@ -871,7 +992,7 @@
         </div>
         <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;">
             <button class="btn btn-sm btn-outline" onclick="quickAdd('两个鸡蛋+咖啡牛奶+半根玉米')">☀️ 早</button>
-            <button class="btn btn-sm btn-outline" onclick="quickAdd('清汤麻辣烫+蔬菜+豆腐')">🌶️ 午</button>
+            <button class="btn btn-sm btn-outline" onclick="quickAdd('清汤麻辣烫+蔬菜+豆腐')">🧀 午</button>
             <button class="btn btn-sm btn-outline" onclick="quickAdd('黄瓜+无糖酸奶+鸡胸肉')">🌙 晚</button>
         </div>
         <div class="food-list" id="foodList">
@@ -927,14 +1048,14 @@
             </span>
         </div>
         <div class="cloud-actions">
-            <button class="btn btn-primary btn-sm" onclick="backupToCloud()">📤 备份到云端</button>
-            <button class="btn btn-outline btn-sm" onclick="restoreFromCloud()">📥 从云端恢复</button>
+            <button class="btn btn-primary btn-sm" onclick="backupToCloud()">📤 备份</button>
+            <button class="btn btn-outline btn-sm" onclick="restoreFromCloud()">📥 恢复</button>
             <button class="btn btn-outline btn-sm" onclick="exportData()">💾 导出本地</button>
             <button class="btn btn-outline btn-sm" onclick="document.getElementById('importFile').click()">📂 导入本地</button>
             <input type="file" id="importFile" accept=".json" style="display:none;" onchange="importData(event)" />
         </div>
-        <div style="font-size:12px;color:#B8A08A;margin-top:4px;">
-            🧀 数据存于腾讯云，多设备共享。杰瑞帮你保管～
+        <div style="font-size:11px;color:#B8A08A;margin-top:4px;">
+            🧀 数据存于腾讯云，多设备共享
         </div>
     </div>
 
@@ -972,8 +1093,20 @@
                 <button class="btn btn-primary" onclick="customMoodQuery()">问问杰瑞</button>
             </div>
             <div style="margin-top:12px;font-size:13px;color:#B8A08A;border-top:1px solid #f0dcc8;padding-top:10px;">
-                💡 替代方案：嚼一根鸡胸肉条 + 云南干碟，或者喝杯热咖啡。
+                💡 替代方案：嚼一根鸡胸肉条 + 云南干碟，或者喝杯热咖啡
             </div>
+        </div>
+    </div>
+
+    <!-- ===== 打卡详情弹窗（点击日期查看当天记录） ===== -->
+    <div class="day-detail-overlay" id="dayDetailOverlay">
+        <div class="day-detail-box">
+            <button class="close-btn" onclick="closeDayDetail()">✕</button>
+            <div class="day-detail-title" id="dayDetailTitle">📅 2026-08-25</div>
+            <div class="day-detail-sub" id="dayDetailSub">这一天的食物记录</div>
+            <ul class="day-detail-list" id="dayDetailList">
+                <li class="empty-msg">🧀 这一天，杰瑞在偷懒～</li>
+            </ul>
         </div>
     </div>
 
@@ -982,7 +1115,7 @@
 
     <script>
         // ================================================================
-        //  Slowly · 奶酪强化版 · 杰瑞陪伴
+        //  Slowly · 奶酪纯净版 · 杰瑞陪伴
         //  数据存储在 localStorage，键名 'slowly_data'
         //  腾讯云环境 ID: deepseek-chat-d5gg0748z3b9dfe24
         // ================================================================
@@ -1084,6 +1217,13 @@
             return null;
         }
 
+        // 获取某天的食物记录
+        function getFoodsForDate(data, dateStr) {
+            const foods = data.foods || [];
+            return foods.filter(f => f.date === dateStr);
+        }
+
+        // ---------- 渲染打卡 ----------
         function renderCheckin(data) {
             const grid = document.getElementById('checkinGrid');
             const streak = getStreak(data);
@@ -1106,17 +1246,20 @@
                 days.push(dd);
             }
 
-            grid.innerHTML = days.map((day, idx) => {
+            grid.innerHTML = days.map((day) => {
                 const dateStr = day.toISOString().slice(0, 10);
                 const isToday = dateStr === getToday();
                 const isChecked = data.checkins && data.checkins[dateStr] === true;
                 const isFuture = day > new Date();
+                const foodsOnDay = getFoodsForDate(data, dateStr);
+                const foodCount = foodsOnDay.length;
 
                 let cls = 'checkin-dot';
                 if (isFuture) cls += ' future';
                 if (isChecked) cls += ' done';
                 if (isToday && !isFuture) cls += ' today';
 
+                // 里程碑标记
                 let label = '';
                 if (isChecked) {
                     const checkinDates = Object.keys(data.checkins || {}).sort();
@@ -1129,9 +1272,55 @@
                     else if (dayNum % 7 === 0 && dayNum > 0) label = '⭐';
                     else label = '✓';
                 }
-                return `<div class="${cls}" title="${dateStr}${isChecked ? ' ✅' : ''}">${label || '·'}</div>`;
+
+                // 悬停提示：显示当天食物条数
+                const tipText = foodCount > 0 ? `${dateStr} · ${foodCount}条记录` : `${dateStr} · 无记录`;
+                const clickAttr = `onclick="showDayDetail('${dateStr}')"`;
+
+                return `<div class="${cls}" ${clickAttr} title="${tipText}">
+                            ${label || (isChecked ? '✓' : '·')}
+                            <span class="day-tooltip">${tipText}</span>
+                        </div>`;
             }).join('');
         }
+
+        // ---------- 显示当天详情 ----------
+        function showDayDetail(dateStr) {
+            const data = getData();
+            const foods = getFoodsForDate(data, dateStr);
+            const overlay = document.getElementById('dayDetailOverlay');
+            const title = document.getElementById('dayDetailTitle');
+            const list = document.getElementById('dayDetailList');
+
+            title.textContent = '📅 ' + dateStr;
+            document.getElementById('dayDetailSub').textContent = foods.length > 0 ?
+                '🧀 记录了 ' + foods.length + ' 条' :
+                '🧀 这一天，杰瑞在偷懒～';
+
+            if (foods.length === 0) {
+                list.innerHTML = `<li class="empty-msg">🧀 这一天，杰瑞在偷懒～</li>`;
+            } else {
+                list.innerHTML = foods.map(f =>
+                    `<li>
+                                <span>${f.desc}</span>
+                                <span>
+                                    <span class="food-tag-sm">${f.tag || '🍽️'}</span>
+                                    <span class="food-time">${f.time || ''}</span>
+                                </span>
+                            </li>`
+                ).join('');
+            }
+
+            overlay.classList.add('active');
+        }
+
+        function closeDayDetail() {
+            document.getElementById('dayDetailOverlay').classList.remove('active');
+        }
+        // 点击外部关闭
+        document.getElementById('dayDetailOverlay').addEventListener('click', function(e) {
+            if (e.target === this) closeDayDetail();
+        });
 
         // ---------- 渲染引擎 ----------
         function renderAll(data) {
@@ -1142,6 +1331,7 @@
             renderSettings(data);
             renderCheckin(data);
             updateMotto();
+            // 自动打卡
             if (data.foods && data.foods.length > 0 && !hasCheckedInToday(data)) {
                 markCheckin(data);
                 renderCheckin(data);
@@ -1213,19 +1403,22 @@
             const container = document.getElementById('foodList');
             const countEl = document.getElementById('foodCount');
             const foods = data.foods || [];
-            countEl.textContent = foods.length + ' 条';
-            if (foods.length === 0) {
+            // 只显示今天的
+            const today = getToday();
+            const todayFoods = foods.filter(f => f.date === today);
+            countEl.textContent = todayFoods.length + ' 条';
+            if (todayFoods.length === 0) {
                 container.innerHTML =
                     `<div style="color:#B8A08A;font-size:14px;text-align:center;padding:10px 0;">今天还没记录呢，慢慢来～</div>`;
                 return;
             }
-            const sorted = [...foods].reverse();
+            const sorted = [...todayFoods].reverse();
             container.innerHTML = sorted.map(f =>
                 `<div class="food-item">
-                    <span class="time-tag">${f.time || ''}</span>
-                    <span class="food-desc">${f.desc || ''}</span>
-                    ${f.tag ? `<span class="food-tag">${f.tag}</span>` : ''}
-                </div>`
+                            <span class="time-tag">${f.time || ''}</span>
+                            <span class="food-desc">${f.desc || ''}</span>
+                            ${f.tag ? `<span class="food-tag">${f.tag}</span>` : ''}
+                        </div>`
             ).join('');
         }
 
@@ -1236,7 +1429,13 @@
             const data = getData();
             const now = new Date();
             const timeStr = `${pad(now.getHours())}:${pad(now.getMinutes())}`;
-            data.foods.push({ time: timeStr, desc: desc, tag: autoTag(desc) });
+            const today = getToday();
+            data.foods.push({
+                date: today,
+                time: timeStr,
+                desc: desc,
+                tag: autoTag(desc)
+            });
             markCheckin(data);
             saveData(data);
             input.value = '';
@@ -1262,7 +1461,8 @@
         }
 
         function renderAnalysis(data) {
-            const foods = data.foods || [];
+            const today = getToday();
+            const foods = (data.foods || []).filter(f => f.date === today);
             const box = document.getElementById('analysisBox');
             if (foods.length === 0) {
                 box.innerHTML = '💡 记录食物后，杰瑞会帮你看看营养够不够～';
@@ -1276,7 +1476,7 @@
             let msg = '',
                 cls = 'analysis-box';
             if (hasProtein && hasCarb && hasVeg) {
-                msg = '🎉 今天营养很均衡！蛋白质、碳水、蔬菜都齐了，继续保持～';
+                msg = '🎉 今天营养很均衡！蛋白质、碳水、蔬菜都齐了～';
                 cls += ' good';
             } else if (hasProtein && hasCarb) {
                 msg = '👍 碳水和蛋白都有了，记得加点绿色蔬菜哦～';
@@ -1288,20 +1488,20 @@
                 msg = '👍 碳水和蔬菜有了，建议补充一些蛋白质（鸡蛋/肉/豆腐）～';
                 cls += ' warn';
             } else if (hasProtein) {
-                msg = '💪 蛋白质摄入不错，但还缺碳水和蔬菜，身体需要均衡能量～';
+                msg = '💪 蛋白质不错，还缺碳水和蔬菜～';
                 cls += ' warn';
             } else if (hasCarb) {
                 msg = '🌾 碳水有了，今天记得补充蛋白质和蔬菜哦～';
                 cls += ' warn';
             } else if (hasVeg) {
-                msg = '🥬 蔬菜很好！但还需要碳水和蛋白质来支撑身体～';
+                msg = '🥬 蔬菜很好！还需要碳水和蛋白质～';
                 cls += ' warn';
             } else {
-                msg = '🧐 今天记录的食物种类不多，试试搭配：蛋白+碳水+蔬菜，慢慢来～';
+                msg = '🧐 试试搭配：蛋白+碳水+蔬菜，慢慢来～';
                 cls += ' warn';
             }
             if (foods.length < 3 && foods.length > 0) {
-                msg += ' （今天只记录了' + foods.length + '次，记得好好吃饭呀）';
+                msg += ' （只记录了' + foods.length + '次，慢慢来）';
             }
             box.innerHTML = '🧀 ' + msg;
             box.className = cls;
@@ -1319,11 +1519,11 @@
             }
             grid.innerHTML = videos.map((v, idx) =>
                 `<div class="video-item">
-                    <span class="v-title">${v.title || '未命名'}</span>
-                    <span class="v-platform">${v.platform || 'B站'}</span>
-                    <a href="${v.url || '#'}" target="_blank" class="v-link">去跟练 →</a>
-                    <span class="del-video" onclick="removeVideo(${idx})">✕</span>
-                </div>`
+                            <span class="v-title">${v.title || '未命名'}</span>
+                            <span class="v-platform">${v.platform || 'B站'}</span>
+                            <a href="${v.url || '#'}" target="_blank" class="v-link">去跟练 →</a>
+                            <span class="del-video" onclick="removeVideo(${idx})">✕</span>
+                        </div>`
             ).join('');
         }
 
@@ -1342,10 +1542,10 @@
             }
             grid.innerHTML = filtered.map((v, idx) =>
                 `<div class="video-item">
-                    <span class="v-title">${v.title || '未命名'}</span>
-                    <span class="v-platform">${v.platform || 'B站'}</span>
-                    <a href="${v.url || '#'}" target="_blank" class="v-link">去跟练 →</a>
-                </div>`
+                            <span class="v-title">${v.title || '未命名'}</span>
+                            <span class="v-platform">${v.platform || 'B站'}</span>
+                            <a href="${v.url || '#'}" target="_blank" class="v-link">去跟练 →</a>
+                        </div>`
             ).join('');
         }
 
@@ -1394,14 +1594,12 @@
         // ---- 座右铭 ----
         function updateMotto() {
             const quotes = [
-                '🧀 今天也慢慢来，好不好？',
-                '🍃 你已经比昨天更了解自己了。',
-                '🌻 不急，吃饱了才有力气慢慢瘦。',
-                '🐭 杰瑞在陪你，慢慢走。',
-                '🌸 今天的你，已经足够好了。',
-                '☀️ 慢慢来，比较快。',
-                '🍵 每一口都值得被认真对待。',
-                '🌙 慢慢食光，静静生长。',
+                '🧀 杰瑞说：慢慢吃，慢慢瘦',
+                '🐭 杰瑞说：饿就吃，不饿就等等',
+                '🧀 杰瑞说：今天的奶酪，要慢慢品',
+                '🐭 杰瑞说：不急，杰瑞陪你',
+                '🧀 杰瑞说：吃好了，心情就好了',
+                '🐭 杰瑞说：慢慢来，比较快',
             ];
             const el = document.getElementById('dailyMotto');
             const today = new Date().toDateString();
@@ -1448,7 +1646,9 @@
         function clearToday() {
             if (!confirm('确定清空今日所有食物记录吗？')) return;
             const data = getData();
-            data.foods = [];
+            const today = getToday();
+            data.foods = (data.foods || []).filter(f => f.date !== today);
+            // 不清除打卡
             saveData(data);
             renderAll(data);
             showToast('🗑️ 今日已清空');
@@ -1629,6 +1829,14 @@
             if (!data.videos) data.videos = getDefaultData().videos;
             if (!data.foods) data.foods = [];
             if (!data.checkins) data.checkins = {};
+            // 兼容旧数据：给没日期的食物补上日期
+            data.foods = data.foods.map(f => {
+                if (!f.date) {
+                    // 尝试从已有的其他字段推断，否则用当天
+                    f.date = getToday();
+                }
+                return f;
+            });
             saveData(data);
             renderAll(data);
 
@@ -1674,6 +1882,8 @@
         window.getData = getData;
         window.saveData = saveData;
         window.showToast = showToast;
+        window.showDayDetail = showDayDetail;
+        window.closeDayDetail = closeDayDetail;
     </script>
 </body>
 </html>
