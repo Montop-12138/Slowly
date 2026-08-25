@@ -75,10 +75,10 @@
             align-items: center;
             gap: 4px;
         }
-        .app-title small {
+        .app-title .sub {
             font-size: 15px;
             font-weight: 400;
-            color: #B8A08A;
+            color: #D4A06A;  /* 与 Slowly 同色 */
         }
 
         .sync-badge {
@@ -704,6 +704,9 @@
             .app-title {
                 font-size: 22px;
             }
+            .app-title .sub {
+                font-size: 13px;
+            }
             .cheese-icon {
                 font-size: 32px;
             }
@@ -853,7 +856,7 @@
         <div class="title-group">
             <span class="cheese-icon" onmouseover="this.style.transform='rotate(0deg) scale(1.05)'" onmouseout="this.style.transform='rotate(-4deg)'">🧀</span>
             <div class="app-title">
-                Slowly <small>· 慢食光</small>
+                Slowly <span class="sub">· 慢食光</span>
                 <span class="sync-badge" id="syncBadge">☁️ 云端</span>
             </div>
         </div>
@@ -863,7 +866,7 @@
     <!-- ===== 打卡 + 里程碑 ===== -->
     <div class="card no-hole">
         <div class="card-title">
-            📆 慢慢打卡
+            📆 今儿打卡
             <span class="badge" id="streakBadge">🔥 0 天</span>
             <span class="milestone-badge" id="milestoneBadge"></span>
         </div>
@@ -900,7 +903,7 @@
     <!-- ===== 食物记录卡片 ===== -->
     <div class="card">
         <div class="card-title">
-            🍽️ 今日食光
+            🍽️ 吃了么你
             <span class="badge" id="foodCount">0 条</span>
         </div>
         <div class="input-row">
@@ -923,7 +926,7 @@
     <!-- ===== 视频百宝箱 ===== -->
     <div class="card">
         <div class="card-title">
-            🎬 跟练百宝箱
+            🎬 练练吧~
             <span class="badge" id="videoCount">6 个</span>
         </div>
         <div class="input-row">
