@@ -1,0 +1,1133 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Slowly · 慢慢食光</title>
+    <!-- 腾讯云开发 SDK -->
+    <script src="https://static.cloudbase.net/cloudbase-js-sdk/2.28.6/cloudbase.full.js"></script>
+    <style>
+        /* ===== 奶黄色主题（与原版一致） ===== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: #FFF8E7;
+            color: #5A4A3A;
+            padding: 20px;
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        .app-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+        }
+        .app-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #E8B86D;
+            letter-spacing: 2px;
+        }
+        .app-title small {
+            font-size: 16px;
+            font-weight: 400;
+            color: #C4A882;
+            margin-left: 6px;
+        }
+        .daily-motto {
+            font-size: 14px;
+            color: #B8A08A;
+            background: #FFFDF5;
+            padding: 4px 14px;
+            border-radius: 30px;
+            border: 1px solid #F5E6D3;
+            font-style: italic;
+        }
+        /* 云端状态徽章 */
+        .sync-badge {
+            font-size: 12px;
+            color: #fff;
+            background: #10b981;
+            padding: 2px 12px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-block;
+            margin-left: 8px;
+        }
+        .sync-badge.offline { background: #ef4444; }
+        .sync-badge.syncing { background: #f59e0b; animation: pulse 1s infinite; }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .card {
+            background: #FFFDF5;
+            border-radius: 20px;
+            padding: 18px 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 12px rgba(232, 184, 109, 0.12);
+            border: 1px solid #F5E6D3;
+            transition: 0.2s;
+        }
+        .card-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #8B7A5C;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .card-title .badge {
+            font-size: 12px;
+            background: #F5D49A;
+            color: #7A5C3A;
+            padding: 0 10px;
+            border-radius: 30px;
+            font-weight: 400;
+        }
+        .countdown-box {
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .countdown-number {
+            font-size: 40px;
+            font-weight: 700;
+            color: #E8B86D;
+            line-height: 1.2;
+        }
+        .countdown-label {
+            font-size: 15px;
+            color: #B8A08A;
+        }
+        .countdown-status {
+            font-size: 14px;
+            padding: 2px 14px;
+            border-radius: 30px;
+            background: #F5E6D3;
+            color: #8B7A5C;
+        }
+        .countdown-status.warning { background: #F5D49A; color: #7A5C3A; }
+        .countdown-status.danger { background: #E8B86D; color: #FFFDF5; }
+        .input-row {
+            display: flex;
+            gap: 8px;
+            margin-top: 6px;
+            flex-wrap: wrap;
+        }
+        .input-row input, .input-row select {
+            flex: 1;
+            min-width: 140px;
+            padding: 10px 14px;
+            border-radius: 40px;
+            border: 1.5px solid #F5E6D3;
+            background: #FFFDF5;
+            font-size: 15px;
+            outline: none;
+            transition: 0.2s;
+            color: #5A4A3A;
+        }
+        .input-row input:focus, .input-row select:focus {
+            border-color: #E8B86D;
+        }
+        .btn {
+            padding: 10px 22px;
+            border: none;
+            border-radius: 40px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: 0.2s;
+            background: #F5D49A;
+            color: #5A4A3A;
+        }
+        .btn:hover { background: #E8B86D; transform: translateY(-1px); }
+        .btn-primary { background: #E8B86D; color: #FFFDF5; }
+        .btn-primary:hover { background: #D4A574; }
+        .btn-danger {
+            background: #C0392B;
+            color: #FFFDF5;
+            font-size: 16px;
+            padding: 12px 28px;
+            box-shadow: 0 4px 16px rgba(192, 57, 43, 0.25);
+        }
+        .btn-danger:hover { background: #A93226; transform: scale(1.02); }
+        .btn-sm { padding: 5px 14px; font-size: 13px; }
+        .btn-outline {
+            background: transparent;
+            border: 1.5px solid #F5E6D3;
+        }
+        .btn-outline:hover { background: #FFF8E7; }
+        .food-list {
+            margin-top: 10px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .food-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            border-bottom: 1px dashed #F5E6D3;
+            font-size: 14px;
+        }
+        .food-item .time-tag { color: #B8A08A; font-size: 12px; }
+        .food-item .food-desc { flex: 1; margin: 0 10px; }
+        .food-item .food-tag {
+            font-size: 12px;
+            background: #F5D49A;
+            padding: 0 10px;
+            border-radius: 30px;
+            color: #7A5C3A;
+        }
+        .analysis-box {
+            background: #FFF8E7;
+            border-radius: 14px;
+            padding: 12px 16px;
+            margin-top: 10px;
+            font-size: 14px;
+            border-left: 4px solid #E8B86D;
+        }
+        .analysis-box.good { border-left-color: #7EB87A; }
+        .analysis-box.warn { border-left-color: #E8B86D; }
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(90, 74, 58, 0.35);
+            backdrop-filter: blur(3px);
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+            padding: 20px;
+        }
+        .modal-overlay.active { display: flex; }
+        .modal-box {
+            background: #FFFDF5;
+            border-radius: 28px;
+            max-width: 480px;
+            width: 100%;
+            padding: 28px 24px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.12);
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+        .modal-box .close-btn {
+            position: absolute;
+            top: 12px;
+            right: 18px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #B8A08A;
+            background: none;
+            border: none;
+        }
+        .modal-box .close-btn:hover { color: #5A4A3A; }
+        .modal-title { font-size: 20px; font-weight: 600; color: #E8B86D; margin-bottom: 6px; }
+        .modal-sub { color: #B8A08A; font-size: 14px; margin-bottom: 16px; }
+        .mood-btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 12px 0;
+        }
+        .mood-btn-group button {
+            flex: 1;
+            min-width: 60px;
+            padding: 10px 12px;
+            border-radius: 40px;
+            border: 1.5px solid #F5E6D3;
+            background: #FFFDF5;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 14px;
+        }
+        .mood-btn-group button:hover { background: #F5D49A; border-color: #E8B86D; }
+        .mood-btn-group button.selected { background: #E8B86D; border-color: #E8B86D; color: #FFFDF5; }
+        .ai-reply-box {
+            background: #FFF8E7;
+            border-radius: 16px;
+            padding: 14px 18px;
+            margin: 12px 0;
+            font-size: 15px;
+            border: 1px solid #F5E6D3;
+            min-height: 60px;
+            white-space: pre-wrap;
+        }
+        .video-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        .video-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 14px;
+            background: #FFF8E7;
+            border-radius: 40px;
+            border: 1px solid #F5E6D3;
+            font-size: 14px;
+        }
+        .video-item .v-title { flex: 1; margin-right: 10px; }
+        .video-item .v-platform { font-size: 12px; color: #B8A08A; margin-right: 10px; }
+        .video-item .v-link { color: #E8B86D; text-decoration: none; font-weight: 500; font-size: 13px; }
+        .video-item .v-link:hover { text-decoration: underline; }
+        .video-item .del-video { cursor: pointer; color: #B8A08A; margin-left: 6px; }
+        .video-item .del-video:hover { color: #C0392B; }
+        .settings-toggle {
+            cursor: pointer;
+            color: #B8A08A;
+            font-size: 13px;
+            text-decoration: underline dotted;
+        }
+        .settings-area {
+            display: none;
+            margin-top: 10px;
+        }
+        .settings-area.open { display: block; }
+        .settings-area label {
+            font-size: 13px;
+            color: #8B7A5C;
+            display: block;
+            margin-top: 8px;
+        }
+        .footer-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin-top: 8px;
+        }
+        .footer-actions .btn { font-size: 13px; padding: 6px 16px; }
+        .floating-help {
+            position: fixed;
+            bottom: 28px;
+            right: 28px;
+            z-index: 100;
+        }
+        .floating-help .btn-danger {
+            border-radius: 60px;
+            padding: 14px 28px;
+            font-size: 17px;
+            box-shadow: 0 8px 30px rgba(192,57,43,0.3);
+        }
+        @media (max-width: 500px) {
+            body { padding: 12px; }
+            .app-title { font-size: 22px; }
+            .countdown-number { font-size: 30px; }
+            .btn-danger { padding: 10px 20px; font-size: 15px; }
+            .floating-help { bottom: 16px; right: 16px; }
+            .floating-help .btn-danger { padding: 10px 18px; font-size: 14px; }
+        }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: #FFF8E7; }
+        ::-webkit-scrollbar-thumb { background: #F5D49A; border-radius: 10px; }
+
+        /* 云端同步按钮组 */
+        .cloud-actions {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-top: 4px;
+        }
+        .cloud-actions .btn {
+            font-size: 12px;
+            padding: 4px 14px;
+        }
+        .cloud-status {
+            font-size: 12px;
+            color: #8B7A5C;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .cloud-status .dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #10b981;
+        }
+        .cloud-status .dot.offline { background: #ef4444; }
+        .cloud-status .dot.syncing { background: #f59e0b; animation: pulse 1s infinite; }
+        .toast {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%) scale(0.9);
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(8px);
+            color: white;
+            padding: 6px 20px;
+            border-radius: 12px;
+            font-size: 12px;
+            z-index: 999;
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            pointer-events: none;
+            white-space: nowrap;
+            max-width: 90%;
+        }
+        .toast.show { opacity: 1; transform: translateX(-50%) scale(1); }
+    </style>
+</head>
+<body>
+
+    <!-- ===== 顶部 ===== -->
+    <div class="app-header">
+        <div class="app-title">
+            Slowly <small>· 慢慢食光</small>
+            <span class="sync-badge" id="syncBadge">☁️ 云端</span>
+        </div>
+        <div class="daily-motto" id="dailyMotto">🌱 今天也慢慢来，好不好？</div>
+    </div>
+
+    <!-- ===== 倒计时卡片 ===== -->
+    <div class="card">
+        <div class="card-title">
+            ⏳ 16+8 时间轴
+            <span class="badge" id="fastingStatus">待设置</span>
+        </div>
+        <div class="countdown-box">
+            <span class="countdown-number" id="countdownDisplay">--:--</span>
+            <span class="countdown-label" id="countdownLabel">距离结束进食</span>
+        </div>
+        <div class="input-row" style="margin-top:10px;">
+            <input type="time" id="startTimeInput" value="09:00" />
+            <button class="btn btn-primary" onclick="setStartTime()">设置第一口时间</button>
+        </div>
+        <div style="font-size:13px;color:#B8A08A;margin-top:6px;">
+            当前进食窗口：<span id="windowDisplay">09:00 – 17:00</span>
+        </div>
+    </div>
+
+    <!-- ===== 食物记录卡片 ===== -->
+    <div class="card">
+        <div class="card-title">
+            🍽️ 今日食光
+            <span class="badge" id="foodCount">0 条</span>
+        </div>
+        <div class="input-row">
+            <input type="text" id="foodInput" placeholder="例如：两个鸡蛋蘸干碟+咖啡" />
+            <button class="btn btn-primary" onclick="addFood()">记录</button>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;">
+            <button class="btn btn-sm btn-outline" onclick="quickAdd('两个鸡蛋+咖啡牛奶+半根玉米')">☀️ 早</button>
+            <button class="btn btn-sm btn-outline" onclick="quickAdd('清汤麻辣烫+蔬菜+豆腐')">🌶️ 午</button>
+            <button class="btn btn-sm btn-outline" onclick="quickAdd('黄瓜+无糖酸奶+鸡胸肉')">🌙 晚</button>
+        </div>
+        <div class="food-list" id="foodList">
+            <div style="color:#B8A08A;font-size:14px;text-align:center;padding:10px 0;">今天还没记录呢，慢慢来～</div>
+        </div>
+        <div class="analysis-box" id="analysisBox">
+            💡 记录食物后，我会帮你看看营养够不够～
+        </div>
+    </div>
+
+    <!-- ===== 视频百宝箱 ===== -->
+    <div class="card">
+        <div class="card-title">
+            🎬 跟练百宝箱
+            <span class="badge" id="videoCount">6 个</span>
+        </div>
+        <div class="input-row">
+            <input type="text" id="videoSearchInput" placeholder="搜索 瘦背 / 体态 / 有氧..." />
+            <button class="btn btn-primary" onclick="filterVideos()">搜索</button>
+        </div>
+        <div class="video-grid" id="videoGrid"></div>
+        <div style="margin-top:8px;">
+            <button class="btn btn-sm btn-outline" onclick="addCustomVideo()">+ 添加自定义视频</button>
+        </div>
+    </div>
+
+    <!-- ===== AI 设置（折叠） ===== -->
+    <div class="card" style="margin-top:8px;">
+        <div class="settings-toggle" onclick="toggleSettings()">⚙️ AI 设置（DeepSeek / Qwen）</div>
+        <div class="settings-area" id="settingsArea">
+            <label>选择模型</label>
+            <div class="input-row">
+                <select id="modelSelect">
+                    <option value="deepseek">DeepSeek</option>
+                    <option value="qwen">Qwen</option>
+                </select>
+                <input type="password" id="apiKeyInput" placeholder="API Key" style="flex:1.5;" />
+            </div>
+            <label>Base URL（可选，留空使用默认）</label>
+            <input type="text" id="baseUrlInput" placeholder="https://api.deepseek.com/v1" style="width:100%;padding:8px 14px;border-radius:40px;border:1.5px solid #F5E6D3;background:#FFFDF5;font-size:14px;outline:none;" />
+            <button class="btn btn-sm btn-primary" style="margin-top:10px;" onclick="saveAIConfig()">保存配置</button>
+            <span id="aiConfigStatus" style="font-size:13px;color:#7EB87A;margin-left:10px;"></span>
+        </div>
+    </div>
+
+    <!-- ===== 云端同步 & 底部工具栏 ===== -->
+    <div class="card">
+        <div class="card-title">
+            ☁️ 云端同步
+            <span class="cloud-status" id="cloudStatus">
+                <span class="dot" id="cloudDot"></span>
+                <span id="cloudText">未连接</span>
+            </span>
+        </div>
+        <div class="cloud-actions">
+            <button class="btn btn-primary btn-sm" onclick="backupToCloud()">📤 备份到云端</button>
+            <button class="btn btn-outline btn-sm" onclick="restoreFromCloud()">📥 从云端恢复</button>
+            <button class="btn btn-outline btn-sm" onclick="exportData()">💾 导出本地备份</button>
+            <button class="btn btn-outline btn-sm" onclick="document.getElementById('importFile').click()">📂 导入本地备份</button>
+            <input type="file" id="importFile" accept=".json" style="display:none;" onchange="importData(event)" />
+        </div>
+        <div style="font-size:12px;color:#B8A08A;margin-top:4px;">
+            💡 云端数据存储在腾讯云开发，多设备共享。点击“备份”上传本地数据，“恢复”拉取云端数据覆盖本地。
+        </div>
+    </div>
+
+    <!-- ===== 底部清除 ===== -->
+    <div class="footer-actions">
+        <button class="btn btn-sm btn-outline" onclick="clearToday()">🗑️ 清空今日</button>
+    </div>
+
+    <!-- ===== 悬浮“救我！想吃！” ===== -->
+    <div class="floating-help">
+        <button class="btn btn-danger" onclick="openMoodModal()">❤️‍🔥 救我！想吃！</button>
+    </div>
+
+    <!-- ===== 情绪急救弹窗 ===== -->
+    <div class="modal-overlay" id="moodModal">
+        <div class="modal-box">
+            <button class="close-btn" onclick="closeMoodModal()">✕</button>
+            <div class="modal-title">🧸 阿呆在这里</div>
+            <div class="modal-sub">先别急，我们慢慢看看是什么在呼唤你～</div>
+            <div style="font-size:14px;color:#8B7A5C;margin-bottom:4px;">你觉得现在是哪一种？</div>
+            <div class="mood-btn-group" id="moodBtnGroup">
+                <button onclick="selectMood('饿了')">🍽️ 饿了</button>
+                <button onclick="selectMood('馋了')">😋 馋了</button>
+                <button onclick="selectMood('情绪')">😤 情绪</button>
+                <button onclick="selectMood('无聊')">😑 无聊</button>
+                <button onclick="selectMood('习惯')">🔄 习惯</button>
+            </div>
+            <div class="ai-reply-box" id="moodReply">
+                👆 点一个选项，阿呆帮你分析～
+            </div>
+            <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
+                <input type="text" id="customMoodInput" placeholder="或者自己描述..." style="flex:1;padding:8px 14px;border-radius:40px;border:1.5px solid #F5E6D3;background:#FFFDF5;font-size:14px;outline:none;" />
+                <button class="btn btn-primary" onclick="customMoodQuery()">问问阿呆</button>
+            </div>
+            <div style="margin-top:12px;font-size:13px;color:#B8A08A;border-top:1px solid #F5E6D3;padding-top:10px;">
+                💡 替代方案：嚼一根鸡胸肉条 + 云南干碟，或者喝杯热咖啡。
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== Toast 提示 ===== -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // ================================================================
+        //  Slowly · 完整版（含腾讯云同步）
+        //  数据存储在 localStorage，键名 'slowly_data'
+        // ================================================================
+
+        // ---------- 云端配置 ----------
+        const ENV_ID = 'deepseek-chat-d5gg0748z3b9dfe24';   // 你的环境ID
+        const COLLECTION_NAME = 'slowly_data';              // 你已创建的集合
+
+        let cloudApp = null;
+        let cloudDb = null;
+        let isCloudReady = false;
+
+        // ---------- 数据模型 ----------
+        function getDefaultData() {
+            return {
+                startTime: '09:00',
+                foods: [],
+                videos: [
+                    { title: '10分钟改善含胸驼背', platform: 'B站', url: 'https://search.bilibili.com/all?keyword=改善含胸驼背' },
+                    { title: '帕梅拉 20分钟全身燃脂', platform: 'B站', url: 'https://search.bilibili.com/all?keyword=帕梅拉全身燃脂' },
+                    { title: '体态大师 矫正骨盆前倾', platform: 'B站', url: 'https://search.bilibili.com/all?keyword=体态大师骨盆前倾' },
+                    { title: '8分钟瘦背跟练', platform: 'B站', url: 'https://search.bilibili.com/all?keyword=8分钟瘦背' },
+                    { title: '办公室拉伸 缓解肩颈', platform: 'B站', url: 'https://search.bilibili.com/all?keyword=办公室拉伸' },
+                    { title: '周六野 瘦手臂', platform: 'B站', url: 'https://search.bilibili.com/all?keyword=周六野瘦手臂' },
+                ],
+                model: 'deepseek',
+                apiKey: '',
+                baseUrl: '',
+                updateTime: new Date().toISOString()   // 用于版本比较
+            };
+        }
+
+        function loadData() {
+            try {
+                const raw = localStorage.getItem('slowly_data');
+                if (raw) {
+                    const data = JSON.parse(raw);
+                    // 补全缺失字段
+                    if (!data.videos) data.videos = getDefaultData().videos;
+                    if (!data.foods) data.foods = [];
+                    if (!data.model) data.model = 'deepseek';
+                    if (!data.updateTime) data.updateTime = new Date().toISOString();
+                    return data;
+                }
+            } catch (e) {}
+            return getDefaultData();
+        }
+
+        function saveData(data) {
+            data.updateTime = new Date().toISOString();
+            localStorage.setItem('slowly_data', JSON.stringify(data));
+        }
+
+        function getData() {
+            return loadData();
+        }
+
+        function persistAndRender() {
+            const data = getData();
+            saveData(data);
+            renderAll(data);
+        }
+
+        // ---------- 渲染引擎 ----------
+        function renderAll(data) {
+            renderCountdown(data);
+            renderFoods(data);
+            renderAnalysis(data);
+            renderVideos(data);
+            renderSettings(data);
+            updateMotto();
+        }
+
+        function renderCountdown(data) {
+            const start = data.startTime || '09:00';
+            const [h, m] = start.split(':').map(Number);
+            const startMs = new Date();
+            startMs.setHours(h, m, 0, 0);
+            const endMs = new Date(startMs.getTime() + 8 * 60 * 60 * 1000);
+            const now = new Date();
+
+            document.getElementById('windowDisplay').textContent =
+                `${pad(startMs.getHours())}:${pad(startMs.getMinutes())} – ${pad(endMs.getHours())}:${pad(endMs.getMinutes())}`;
+
+            const isWithin = now >= startMs && now <= endMs;
+            const statusEl = document.getElementById('fastingStatus');
+            if (!isWithin && now < startMs) {
+                statusEl.textContent = '⏳ 尚未开始';
+                statusEl.className = 'badge';
+            } else if (isWithin) {
+                statusEl.textContent = '🔥 进食窗口';
+                statusEl.className = 'badge warning';
+            } else {
+                statusEl.textContent = '🌙 空腹燃脂期';
+                statusEl.className = 'badge';
+            }
+
+            const displayEl = document.getElementById('countdownDisplay');
+            const labelEl = document.getElementById('countdownLabel');
+            if (now < startMs) {
+                const diff = startMs - now;
+                labelEl.textContent = '距离开始进食';
+                displayEl.textContent = formatDuration(diff);
+            } else if (isWithin) {
+                const diff = endMs - now;
+                labelEl.textContent = '距离结束进食';
+                displayEl.textContent = formatDuration(diff);
+            } else {
+                labelEl.textContent = '已结束进食';
+                displayEl.textContent = '🌙 好好休息';
+            }
+        }
+
+        function formatDuration(ms) {
+            if (ms <= 0) return '00:00';
+            const totalSec = Math.floor(ms / 1000);
+            const h = Math.floor(totalSec / 3600);
+            const m = Math.floor((totalSec % 3600) / 60);
+            return `${pad(h)}:${pad(m)}`;
+        }
+        function pad(n) { return String(n).padStart(2, '0'); }
+
+        function setStartTime() {
+            const val = document.getElementById('startTimeInput').value;
+            if (!val) return;
+            const data = getData();
+            data.startTime = val;
+            saveData(data);
+            renderAll(data);
+        }
+
+        // ---- 食物 ----
+        function renderFoods(data) {
+            const container = document.getElementById('foodList');
+            const countEl = document.getElementById('foodCount');
+            const foods = data.foods || [];
+            countEl.textContent = foods.length + ' 条';
+            if (foods.length === 0) {
+                container.innerHTML = `<div style="color:#B8A08A;font-size:14px;text-align:center;padding:10px 0;">今天还没记录呢，慢慢来～</div>`;
+                return;
+            }
+            const sorted = [...foods].reverse();
+            container.innerHTML = sorted.map(f =>
+                `<div class="food-item">
+                    <span class="time-tag">${f.time || ''}</span>
+                    <span class="food-desc">${f.desc || ''}</span>
+                    ${f.tag ? `<span class="food-tag">${f.tag}</span>` : ''}
+                </div>`
+            ).join('');
+        }
+
+        function addFood() {
+            const input = document.getElementById('foodInput');
+            const desc = input.value.trim();
+            if (!desc) return;
+            const data = getData();
+            const now = new Date();
+            const timeStr = `${pad(now.getHours())}:${pad(now.getMinutes())}`;
+            data.foods.push({ time: timeStr, desc: desc, tag: autoTag(desc) });
+            saveData(data);
+            input.value = '';
+            renderAll(data);
+        }
+
+        function quickAdd(desc) {
+            document.getElementById('foodInput').value = desc;
+            addFood();
+        }
+
+        function autoTag(desc) {
+            const t = desc.toLowerCase();
+            if (t.includes('蛋') || t.includes('肉') || t.includes('鸡') || t.includes('鱼') || t.includes('虾') || t.includes('豆腐') || t.includes('奶') || t.includes('豆')) return '🥩 蛋白';
+            if (t.includes('饭') || t.includes('面') || t.includes('包') || t.includes('玉米') || t.includes('薯') || t.includes('燕麦')) return '🌾 碳水';
+            if (t.includes('蔬菜') || t.includes('菜') || t.includes('黄瓜') || t.includes('番茄') || t.includes('生菜') || t.includes('菠菜') || t.includes('西兰花')) return '🥬 蔬菜';
+            if (t.includes('咖啡') || t.includes('茶') || t.includes('水')) return '☕ 饮品';
+            return '🍽️ 其他';
+        }
+
+        function renderAnalysis(data) {
+            const foods = data.foods || [];
+            const box = document.getElementById('analysisBox');
+            if (foods.length === 0) {
+                box.innerHTML = '💡 记录食物后，我会帮你看看营养够不够～';
+                box.className = 'analysis-box';
+                return;
+            }
+            const tags = foods.map(f => autoTag(f.desc));
+            const hasProtein = tags.some(t => t.includes('蛋白'));
+            const hasCarb = tags.some(t => t.includes('碳水'));
+            const hasVeg = tags.some(t => t.includes('蔬菜'));
+            let msg = '', cls = 'analysis-box';
+            if (hasProtein && hasCarb && hasVeg) {
+                msg = '🎉 今天营养很均衡！蛋白质、碳水、蔬菜都齐了，继续保持～';
+                cls += ' good';
+            } else if (hasProtein && hasCarb) {
+                msg = '👍 碳水和蛋白都有了，记得加点绿色蔬菜哦～';
+                cls += ' warn';
+            } else if (hasProtein && hasVeg) {
+                msg = '👍 蛋白和蔬菜不错，今天可以补充一些碳水（玉米/燕麦/饭）～';
+                cls += ' warn';
+            } else if (hasCarb && hasVeg) {
+                msg = '👍 碳水和蔬菜有了，建议补充一些蛋白质（鸡蛋/肉/豆腐）～';
+                cls += ' warn';
+            } else if (hasProtein) {
+                msg = '💪 蛋白质摄入不错，但还缺碳水和蔬菜，身体需要均衡能量～';
+                cls += ' warn';
+            } else if (hasCarb) {
+                msg = '🌾 碳水有了，今天记得补充蛋白质和蔬菜哦～';
+                cls += ' warn';
+            } else if (hasVeg) {
+                msg = '🥬 蔬菜很好！但还需要碳水和蛋白质来支撑身体～';
+                cls += ' warn';
+            } else {
+                msg = '🧐 今天记录的食物种类不多，试试搭配：蛋白+碳水+蔬菜，慢慢来～';
+                cls += ' warn';
+            }
+            if (foods.length < 3 && foods.length > 0) {
+                msg += ' （今天只记录了' + foods.length + '次，记得好好吃饭呀）';
+            }
+            box.innerHTML = '💡 ' + msg;
+            box.className = cls;
+        }
+
+        // ---- 视频 ----
+        function renderVideos(data) {
+            const grid = document.getElementById('videoGrid');
+            const videos = data.videos || [];
+            document.getElementById('videoCount').textContent = videos.length + ' 个';
+            if (videos.length === 0) {
+                grid.innerHTML = `<div style="color:#B8A08A;font-size:14px;text-align:center;padding:10px 0;">还没有视频，点击下方添加～</div>`;
+                return;
+            }
+            grid.innerHTML = videos.map((v, idx) =>
+                `<div class="video-item">
+                    <span class="v-title">${v.title || '未命名'}</span>
+                    <span class="v-platform">${v.platform || 'B站'}</span>
+                    <a href="${v.url || '#'}" target="_blank" class="v-link">去跟练 →</a>
+                    <span class="del-video" onclick="removeVideo(${idx})">✕</span>
+                </div>`
+            ).join('');
+        }
+
+        function filterVideos() {
+            const keyword = document.getElementById('videoSearchInput').value.trim().toLowerCase();
+            const data = getData();
+            let filtered = data.videos;
+            if (keyword) {
+                filtered = filtered.filter(v => v.title.toLowerCase().includes(keyword));
+            }
+            const grid = document.getElementById('videoGrid');
+            if (filtered.length === 0) {
+                grid.innerHTML = `<div style="color:#B8A08A;font-size:14px;text-align:center;padding:10px 0;">没找到相关视频，试试其他关键词～</div>`;
+                return;
+            }
+            grid.innerHTML = filtered.map((v, idx) =>
+                `<div class="video-item">
+                    <span class="v-title">${v.title || '未命名'}</span>
+                    <span class="v-platform">${v.platform || 'B站'}</span>
+                    <a href="${v.url || '#'}" target="_blank" class="v-link">去跟练 →</a>
+                </div>`
+            ).join('');
+        }
+
+        function addCustomVideo() {
+            const title = prompt('请输入视频标题：');
+            if (!title) return;
+            const platform = prompt('平台（如 B站 / 小红书）：') || 'B站';
+            const url = prompt('视频链接（或搜索关键词）：') || 'https://search.bilibili.com/all?keyword=' + encodeURIComponent(title);
+            const data = getData();
+            data.videos.push({ title, platform, url });
+            saveData(data);
+            renderAll(data);
+        }
+
+        function removeVideo(idx) {
+            if (!confirm('移除这个视频吗？')) return;
+            const data = getData();
+            data.videos.splice(idx, 1);
+            saveData(data);
+            renderAll(data);
+        }
+
+        // ---- 设置 ----
+        function renderSettings(data) {
+            document.getElementById('modelSelect').value = data.model || 'deepseek';
+            document.getElementById('apiKeyInput').value = data.apiKey || '';
+            document.getElementById('baseUrlInput').value = data.baseUrl || '';
+        }
+
+        function saveAIConfig() {
+            const data = getData();
+            data.model = document.getElementById('modelSelect').value;
+            data.apiKey = document.getElementById('apiKeyInput').value.trim();
+            data.baseUrl = document.getElementById('baseUrlInput').value.trim();
+            saveData(data);
+            document.getElementById('aiConfigStatus').textContent = '✅ 已保存';
+            setTimeout(() => { document.getElementById('aiConfigStatus').textContent = ''; }, 2000);
+        }
+
+        function toggleSettings() {
+            document.getElementById('settingsArea').classList.toggle('open');
+        }
+
+        // ---- 座右铭 ----
+        function updateMotto() {
+            const quotes = [
+                '🌱 今天也慢慢来，好不好？',
+                '🍃 你已经比昨天更了解自己了。',
+                '🌻 不急，吃饱了才有力气慢慢瘦。',
+                '🧸 阿呆正在泡茶，你慢慢吃。',
+                '🌸 今天的你，已经足够好了。',
+                '☀️ 慢慢来，比较快。',
+                '🍵 每一口都值得被认真对待。',
+                '🌙 慢慢食光，静静生长。',
+            ];
+            const el = document.getElementById('dailyMotto');
+            const today = new Date().toDateString();
+            const seed = today.split(' ').join('').length;
+            const idx = seed % quotes.length;
+            el.textContent = quotes[idx] || quotes[0];
+        }
+
+        // ---- 导出/导入本地备份 ----
+        function exportData() {
+            const data = getData();
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `slowly_backup_${new Date().toISOString().slice(0,10)}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast('✅ 本地备份已导出');
+        }
+
+        function importData(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    if (data.foods !== undefined && data.videos !== undefined) {
+                        saveData(data);
+                        renderAll(data);
+                        showToast('✅ 本地备份导入成功');
+                    } else {
+                        showToast('❌ 数据格式不正确');
+                    }
+                } catch (err) {
+                    showToast('❌ 解析失败：' + err.message);
+                }
+            };
+            reader.readAsText(file);
+            event.target.value = '';
+        }
+
+        function clearToday() {
+            if (!confirm('确定清空今日所有食物记录吗？')) return;
+            const data = getData();
+            data.foods = [];
+            saveData(data);
+            renderAll(data);
+            showToast('🗑️ 今日已清空');
+        }
+
+        // ---- 情绪急救（离线预设） ----
+        function openMoodModal() {
+            document.getElementById('moodModal').classList.add('active');
+            document.getElementById('moodReply').innerHTML = '👆 点一个选项，阿呆帮你分析～';
+            document.querySelectorAll('#moodBtnGroup button').forEach(b => b.classList.remove('selected'));
+            document.getElementById('customMoodInput').value = '';
+        }
+        function closeMoodModal() {
+            document.getElementById('moodModal').classList.remove('active');
+        }
+        document.getElementById('moodModal').addEventListener('click', function(e) {
+            if (e.target === this) closeMoodModal();
+        });
+
+        function selectMood(mood) {
+            document.querySelectorAll('#moodBtnGroup button').forEach(b => b.classList.remove('selected'));
+            event.target.classList.add('selected');
+            const replyBox = document.getElementById('moodReply');
+            replyBox.innerHTML = '🤔 阿呆正在思考...';
+            const replies = {
+                '饿了': '唔… 如果是真的饿了，那就吃一点吧！试试先喝杯温水，等10分钟，如果还饿，就吃一小份蛋白质（鸡蛋/鸡胸肉），配点蔬菜。慢慢吃，阿呆陪着你～',
+                '馋了': '馋了呀… 是不是想念某种味道了？可能是小时候的回忆在呼唤你。允许自己吃一小口解馋，但记得配上一杯水，慢慢品。如果想吃重口味，试试云南干碟蘸黄瓜～',
+                '情绪': '嗯… 情绪来了。先别急着吃东西，阿呆陪你做个深呼吸——吸～呼～。现在感觉好一点了吗？如果还是想嚼点什么，试试冰块或者胡萝卜条，让嘴巴忙起来。',
+                '无聊': '无聊的时候嘴巴容易寂寞… 要不要起来走一走？或者打开 Slowly 的「视频百宝箱」找个短跟练？哪怕只动5分钟，心情也会不一样。',
+                '习惯': '习惯的力量很强大呢。每次想伸手拿零食时，先做一件别的事——比如整理一下桌面，或者给阿呆发一条消息。慢慢来，旧习惯会一点点被新习惯替代的。',
+            };
+            const reply = replies[mood] || '阿呆也不太确定… 要不你告诉我更多？我试着帮你理一理。';
+            setTimeout(() => { replyBox.innerHTML = '🧸 ' + reply; }, 500);
+        }
+
+        function customMoodQuery() {
+            const input = document.getElementById('customMoodInput');
+            const text = input.value.trim();
+            if (!text) return;
+            const replyBox = document.getElementById('moodReply');
+            replyBox.innerHTML = '🤔 阿呆正在认真想...';
+            // 简单回复（可扩展AI）
+            const fallback = `唔… 你说「${text}」的时候，阿呆感觉到你心里有东西在动。要不我们先一起深呼吸三次？然后问问自己：这一刻，我真正需要的是什么？是食物，还是别的什么？慢慢想，阿呆不着急。`;
+            setTimeout(() => { replyBox.innerHTML = '🧸 ' + fallback; }, 600);
+            input.value = '';
+        }
+
+        // ---------- 云端同步核心（从文游节拍器提取） ----------
+        async function initCloud() {
+            try {
+                if (typeof cloudbase === 'undefined') {
+                    console.warn('❌ cloudbase SDK 未加载');
+                    setCloudStatus('offline');
+                    return false;
+                }
+                cloudApp = cloudbase.init({ env: ENV_ID });
+                const auth = cloudApp.auth();
+                const loginState = await auth.getLoginState();
+                if (!loginState) {
+                    await auth.anonymousAuthProvider().signIn();
+                }
+                cloudDb = cloudApp.database();
+                isCloudReady = true;
+                setCloudStatus('online');
+                console.log('✅ 云端初始化成功');
+                return true;
+            } catch (e) {
+                console.error('❌ 云端初始化失败:', e);
+                isCloudReady = false;
+                setCloudStatus('offline');
+                return false;
+            }
+        }
+
+        function setCloudStatus(status) {
+            const dot = document.getElementById('cloudDot');
+            const text = document.getElementById('cloudText');
+            const badge = document.getElementById('syncBadge');
+            if (status === 'online') {
+                dot.className = 'dot';
+                text.textContent = '已连接';
+                badge.textContent = '☁️ 云端';
+                badge.className = 'sync-badge';
+            } else if (status === 'syncing') {
+                dot.className = 'dot syncing';
+                text.textContent = '同步中...';
+                badge.textContent = '⏳ 同步中';
+                badge.className = 'sync-badge syncing';
+            } else if (status === 'offline') {
+                dot.className = 'dot offline';
+                text.textContent = '未连接';
+                badge.textContent = '📡 离线';
+                badge.className = 'sync-badge offline';
+            }
+        }
+
+        async function backupToCloud() {
+            if (!isCloudReady) {
+                showToast('⏳ 云端未连接，尝试初始化...');
+                await initCloud();
+                if (!isCloudReady) {
+                    showToast('❌ 云端连接失败，请检查网络');
+                    return;
+                }
+            }
+            try {
+                setCloudStatus('syncing');
+                showToast('📤 正在备份到云端...');
+                const data = getData();
+                // 确保有更新时间
+                data.updateTime = new Date().toISOString();
+                const collection = cloudDb.collection(COLLECTION_NAME);
+                // 先删除所有旧记录（简单覆盖）
+                const existing = await collection.limit(100).get();
+                for (const item of (existing.data || [])) {
+                    if (item._id) await collection.doc(item._id).remove();
+                }
+                // 上传新数据
+                await collection.add({
+                    data: data,
+                    updateTime: data.updateTime
+                });
+                setCloudStatus('online');
+                showToast('✅ 备份成功！数据已上传云端');
+            } catch (e) {
+                console.error('备份失败:', e);
+                setCloudStatus('offline');
+                showToast('❌ 备份失败：' + e.message);
+            }
+        }
+
+        async function restoreFromCloud() {
+            if (!isCloudReady) {
+                showToast('⏳ 云端未连接，尝试初始化...');
+                await initCloud();
+                if (!isCloudReady) {
+                    showToast('❌ 云端连接失败，请检查网络');
+                    return;
+                }
+            }
+            if (!confirm('将从云端恢复数据，覆盖本地所有内容，确定继续？')) return;
+            try {
+                setCloudStatus('syncing');
+                showToast('📥 正在从云端恢复...');
+                const collection = cloudDb.collection(COLLECTION_NAME);
+                const res = await collection.limit(1).get();
+                if (res.data && res.data.length > 0) {
+                    const cloudData = res.data[0].data;
+                    if (cloudData && cloudData.foods !== undefined) {
+                        saveData(cloudData);
+                        renderAll(cloudData);
+                        setCloudStatus('online');
+                        showToast('✅ 恢复成功！已加载云端数据');
+                    } else {
+                        showToast('❌ 云端数据格式无效');
+                        setCloudStatus('online');
+                    }
+                } else {
+                    showToast('⚠️ 云端暂无数据，请先备份');
+                    setCloudStatus('online');
+                }
+            } catch (e) {
+                console.error('恢复失败:', e);
+                setCloudStatus('offline');
+                showToast('❌ 恢复失败：' + e.message);
+            }
+        }
+
+        // ---------- Toast ----------
+        let toastTimer = null;
+        function showToast(msg) {
+            const el = document.getElementById('toast');
+            el.textContent = msg;
+            el.classList.add('show');
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => { el.classList.remove('show'); }, 3000);
+        }
+
+        // ---------- 初始化 ----------
+        document.addEventListener('DOMContentLoaded', function() {
+            // 加载本地数据
+            const data = getData();
+            if (!data.videos) data.videos = getDefaultData().videos;
+            if (!data.foods) data.foods = [];
+            saveData(data);
+            renderAll(data);
+
+            // 恢复输入框
+            document.getElementById('startTimeInput').value = data.startTime || '09:00';
+
+            // 事件绑定
+            document.getElementById('foodInput').addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') addFood();
+            });
+            document.getElementById('videoSearchInput').addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') filterVideos();
+            });
+            document.getElementById('customMoodInput').addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') customMoodQuery();
+            });
+
+            // 初始化云端
+            initCloud();
+
+            // 每30秒刷新倒计时
+            setInterval(() => {
+                const data = getData();
+                renderCountdown(data);
+            }, 30000);
+        });
+
+        // 暴露全局函数（供HTML onclick调用）
+        window.setStartTime = setStartTime;
+        window.addFood = addFood;
+        window.quickAdd = quickAdd;
+        window.filterVideos = filterVideos;
+        window.addCustomVideo = addCustomVideo;
+        window.removeVideo = removeVideo;
+        window.saveAIConfig = saveAIConfig;
+        window.toggleSettings = toggleSettings;
+        window.exportData = exportData;
+        window.importData = importData;
+        window.clearToday = clearToday;
+        window.openMoodModal = openMoodModal;
+        window.closeMoodModal = closeMoodModal;
+        window.selectMood = selectMood;
+        window.customMoodQuery = customMoodQuery;
+        window.backupToCloud = backupToCloud;
+        window.restoreFromCloud = restoreFromCloud;
+        window.renderAll = renderAll;
+        window.getData = getData;
+        window.saveData = saveData;
+        window.showToast = showToast;
+    </script>
+</body>
+</html>
