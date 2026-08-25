@@ -9,7 +9,7 @@
     </script>
     <style>
         /* ================================================================
-               奶酪主题 · 纯净明亮版 · 真 · 奶酪黄
+               奶酪主题 · 纯净明亮版
                ================================================================ */
 
         * {
@@ -37,7 +37,6 @@
             background-color: #FFEAA7;
         }
 
-        /* ===== 顶部 ===== */
         .app-header {
             display: flex;
             justify-content: space-between;
@@ -78,7 +77,7 @@
         .app-title .sub {
             font-size: 15px;
             font-weight: 400;
-            color: #D4A06A;  /* 与 Slowly 同色 */
+            color: #D4A06A;
         }
 
         .sync-badge {
@@ -123,7 +122,6 @@
             font-weight: 500;
         }
 
-        /* ===== 卡片 ===== */
         .card {
             background: #FFFAF0;
             border-radius: 28px 28px 24px 24px;
@@ -396,6 +394,30 @@
             transform: translateY(-2px);
         }
 
+        /* 餐别按钮 */
+        .meal-btn {
+            transition: 0.2s;
+        }
+        .meal-btn.active {
+            background: #D4A06A;
+            color: #FFFDF5;
+            border-color: #D4A06A;
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(212, 160, 106, 0.3);
+        }
+        .meal-btn.active:hover {
+            background: #c4905a;
+        }
+
+        /* 取消按钮 */
+        .btn-cancel {
+            background: #e0d0c0;
+            color: #7A5C3A;
+        }
+        .btn-cancel:hover {
+            background: #d0c0b0;
+        }
+
         /* ===== 食物列表 ===== */
         .food-list {
             margin-top: 10px;
@@ -424,6 +446,14 @@
             border-radius: 30px;
             color: #7A5C3A;
         }
+        .food-item .meal-tag {
+            font-size: 11px;
+            background: #D4A06A;
+            color: #FFFDF5;
+            padding: 0 8px;
+            border-radius: 30px;
+            margin-right: 4px;
+        }
 
         .analysis-box {
             background: #fcf3e3;
@@ -432,12 +462,19 @@
             margin-top: 10px;
             font-size: 14px;
             border-left: 4px solid #D4A06A;
+            min-height: 50px;
+            white-space: pre-wrap;
+            line-height: 1.8;
         }
         .analysis-box.good {
             border-left-color: #7EB87A;
         }
         .analysis-box.warn {
             border-left-color: #f5c842;
+        }
+        .analysis-box .ai-thinking {
+            color: #B8A08A;
+            font-style: italic;
         }
 
         /* ===== 模态框 ===== */
@@ -529,6 +566,7 @@
             border: 1px solid #f0dcc8;
             min-height: 60px;
             white-space: pre-wrap;
+            line-height: 1.8;
         }
 
         /* ===== 视频 ===== */
@@ -847,6 +885,14 @@
             border-radius: 30px;
             color: #7A5C3A;
         }
+        .day-detail-list .meal-tag-sm {
+            font-size: 10px;
+            background: #D4A06A;
+            color: #FFFDF5;
+            padding: 0 8px;
+            border-radius: 30px;
+            margin-right: 4px;
+        }
     </style>
 </head>
 <body>
@@ -863,7 +909,7 @@
         <div class="daily-motto" id="dailyMotto">🧀 杰瑞说：慢慢吃，慢慢瘦</div>
     </div>
 
-    <!-- ===== 打卡 + 里程碑 ===== -->
+    <!-- ===== 打卡 ===== -->
     <div class="card no-hole">
         <div class="card-title">
             📆 今儿打卡
@@ -881,7 +927,7 @@
         </div>
     </div>
 
-    <!-- ===== 倒计时卡片 ===== -->
+    <!-- ===== 倒计时 ===== -->
     <div class="card">
         <div class="card-title">
             ⏳ 16+8 时间轴
@@ -900,30 +946,32 @@
         </div>
     </div>
 
-    <!-- ===== 食物记录卡片 ===== -->
+    <!-- ===== 食物记录 ===== -->
     <div class="card">
         <div class="card-title">
             🍽️ 吃了么你
             <span class="badge" id="foodCount">0 条</span>
+            <span class="badge" id="mealIndicator" style="background:#D4A06A;color:#FFFDF5;display:none;">☀️ 早</span>
         </div>
         <div class="input-row">
-            <input type="text" id="foodInput" placeholder="例如：两个鸡蛋蘸干碟+咖啡" />
-            <button class="btn btn-primary" onclick="addFood()">记录</button>
+            <input type="text" id="foodInput" placeholder="例如：两个鸡蛋蘸云南干碟" />
+            <button class="btn btn-primary" id="recordBtn" onclick="recordFood()">记录</button>
+            <button class="btn btn-cancel btn-sm" id="cancelMealBtn" onclick="cancelMeal()" style="display:none;">取消</button>
         </div>
         <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;">
-            <button class="btn btn-sm btn-outline" onclick="quickAdd('两个鸡蛋+咖啡牛奶+半根玉米')">☀️ 早</button>
-            <button class="btn btn-sm btn-outline" onclick="quickAdd('清汤麻辣烫+蔬菜+豆腐')">🧀 午</button>
-            <button class="btn btn-sm btn-outline" onclick="quickAdd('黄瓜+无糖酸奶+鸡胸肉')">🌙 晚</button>
+            <button class="btn btn-sm btn-outline meal-btn" data-meal="☀️ 早" onclick="selectMeal('早')">☀️ 早</button>
+            <button class="btn btn-sm btn-outline meal-btn" data-meal="🧀 午" onclick="selectMeal('午')">🧀 午</button>
+            <button class="btn btn-sm btn-outline meal-btn" data-meal="🌙 晚" onclick="selectMeal('晚')">🌙 晚</button>
         </div>
         <div class="food-list" id="foodList">
             <div style="color:#B8A08A;font-size:14px;text-align:center;padding:10px 0;">今天还没记录呢，慢慢来～</div>
         </div>
         <div class="analysis-box" id="analysisBox">
-            💡 记录食物后，杰瑞会帮你看看营养够不够～
+            💡 点击「早/午/晚」标记餐别，输入食物，杰瑞帮你拆解营养～
         </div>
     </div>
 
-    <!-- ===== 视频百宝箱 ===== -->
+    <!-- ===== 视频 ===== -->
     <div class="card">
         <div class="card-title">
             🎬 练练吧~
@@ -939,7 +987,7 @@
         </div>
     </div>
 
-    <!-- ===== AI 设置（折叠） ===== -->
+    <!-- ===== AI 设置 ===== -->
     <div class="card no-hole">
         <div class="settings-toggle" onclick="toggleSettings()">⚙️ AI 设置（DeepSeek / Qwen）</div>
         <div class="settings-area" id="settingsArea">
@@ -979,12 +1027,12 @@
         </div>
     </div>
 
-    <!-- ===== 底部清除 ===== -->
+    <!-- ===== 底部 ===== -->
     <div class="footer-actions">
         <button class="btn btn-sm btn-outline" onclick="clearToday()">🗑️ 清空今日</button>
     </div>
 
-    <!-- ===== 🪤 救救！浮窗 ===== -->
+    <!-- ===== 🪤 救救！ ===== -->
     <div class="floating-help">
         <button class="btn-jerry" onclick="openMoodModal()">
             <span class="trap-icon">🪤</span> 救救！
@@ -1006,11 +1054,11 @@
                 <button onclick="selectMood('习惯')">🔄 习惯</button>
             </div>
             <div class="ai-reply-box" id="moodReply">
-                👆 点一个选项，杰瑞帮你分析～
+                👆 点一个选项，或者直接描述你的感受，杰瑞会用 AI 帮你分析～
             </div>
             <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
-                <input type="text" id="customMoodInput" placeholder="或者自己描述..." style="flex:1;padding:8px 14px;border-radius:40px;border:1.5px solid #f0dcc8;background:#FFFDF5;font-size:14px;outline:none;" />
-                <button class="btn btn-primary" onclick="customMoodQuery()">问问杰瑞</button>
+                <input type="text" id="customMoodInput" placeholder="比如：我现在特别想吃炸鸡..." style="flex:1;padding:8px 14px;border-radius:40px;border:1.5px solid #f0dcc8;background:#FFFDF5;font-size:14px;outline:none;" />
+                <button class="btn btn-primary" id="askJerryBtn" onclick="askJerry()">问问杰瑞</button>
             </div>
             <div style="margin-top:12px;font-size:13px;color:#B8A08A;border-top:1px solid #f0dcc8;padding-top:10px;">
                 💡 替代方案：嚼一根鸡胸肉条 + 云南干碟，或者喝杯热咖啡
@@ -1035,7 +1083,7 @@
 
     <script>
         // ================================================================
-        //  Slowly · 奶酪纯净版 · 杰瑞陪伴
+        //  Slowly · 完整版 · 杰瑞陪伴 · AI 双模块
         //  数据存储在 localStorage，键名 'slowly_data'
         //  腾讯云环境 ID: deepseek-chat-d5gg0748z3b9dfe24
         // ================================================================
@@ -1047,6 +1095,10 @@
         let cloudApp = null;
         let cloudDb = null;
         let isCloudReady = false;
+
+        // ---------- 状态 ----------
+        let selectedMeal = null; // '早' | '午' | '晚' | null
+        let isAnalyzing = false;
 
         // ---------- 数据模型 ----------
         function getDefaultData() {
@@ -1092,7 +1144,7 @@
 
         function getData() { return loadData(); }
 
-        // ---------- 打卡逻辑 ----------
+        // ---------- 打卡 ----------
         function getToday() {
             return new Date().toISOString().slice(0, 10);
         }
@@ -1219,7 +1271,10 @@
             } else {
                 list.innerHTML = foods.map(f =>
                     `<li>
-                                <span>${f.desc}</span>
+                                <span>
+                                    ${f.meal ? `<span class="meal-tag-sm">${f.meal}</span>` : ''}
+                                    ${f.desc}
+                                </span>
                                 <span>
                                     <span class="food-tag-sm">${f.tag || '🍽️'}</span>
                                     <span class="food-time">${f.time || ''}</span>
@@ -1238,22 +1293,7 @@
             if (e.target === this) closeDayDetail();
         });
 
-        // ---------- 渲染引擎 ----------
-        function renderAll(data) {
-            renderCountdown(data);
-            renderFoods(data);
-            renderAnalysis(data);
-            renderVideos(data);
-            renderSettings(data);
-            renderCheckin(data);
-            updateMotto();
-            if (data.foods && data.foods.length > 0 && !hasCheckedInToday(data)) {
-                markCheckin(data);
-                renderCheckin(data);
-            }
-        }
-
-        // ---- 倒计时 ----
+        // ---------- 倒计时 ----------
         function renderCountdown(data) {
             const start = data.startTime || '09:00';
             const [h, m] = start.split(':').map(Number);
@@ -1313,7 +1353,359 @@
             renderAll(data);
         }
 
-        // ---- 食物 ----
+        // ---------- 食物记录（AI 营养拆解） ----------
+        function selectMeal(meal) {
+            selectedMeal = meal;
+            // 高亮按钮
+            document.querySelectorAll('.meal-btn').forEach(b => b.classList.remove('active'));
+            document.querySelector(`.meal-btn[data-meal="${meal === '早' ? '☀️ 早' : meal === '午' ? '🧀 午' : '🌙 晚'}"]`).classList
+                .add('active');
+
+            const indicator = document.getElementById('mealIndicator');
+            indicator.textContent = meal === '早' ? '☀️ 早' : meal === '午' ? '🧀 午' : '🌙 晚';
+            indicator.style.display = 'inline-block';
+
+            document.getElementById('cancelMealBtn').style.display = 'inline-block';
+            document.getElementById('foodInput').placeholder = `输入 ${meal}餐吃了什么...`;
+            document.getElementById('foodInput').focus();
+
+            // 更新分析框提示
+            const box = document.getElementById('analysisBox');
+            box.innerHTML = `🧀 已选 ${meal}餐，输入食物后杰瑞帮你拆解营养～`;
+            box.className = 'analysis-box';
+
+            showToast(`🧀 已标记 ${meal}餐，输入食物吧`);
+        }
+
+        function cancelMeal() {
+            selectedMeal = null;
+            document.querySelectorAll('.meal-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('mealIndicator').style.display = 'none';
+            document.getElementById('cancelMealBtn').style.display = 'none';
+            document.getElementById('foodInput').placeholder = '例如：两个鸡蛋蘸云南干碟';
+            const box = document.getElementById('analysisBox');
+            box.innerHTML = '💡 点击「早/午/晚」标记餐别，输入食物，杰瑞帮你拆解营养～';
+            box.className = 'analysis-box';
+            document.getElementById('foodInput').value = '';
+            document.getElementById('foodInput').focus();
+        }
+
+        async function recordFood() {
+            const input = document.getElementById('foodInput');
+            const desc = input.value.trim();
+            if (!desc) {
+                showToast('🍽️ 先输入吃了什么吧');
+                return;
+            }
+            if (!selectedMeal) {
+                showToast('👆 先点击「早/午/晚」标记餐别');
+                return;
+            }
+
+            if (isAnalyzing) return;
+            isAnalyzing = true;
+
+            const data = getData();
+            const now = new Date();
+            const timeStr = `${pad(now.getHours())}:${pad(now.getMinutes())}`;
+            const today = getToday();
+
+            // 先保存一条临时记录（带 AI 分析中状态）
+            const mealEmoji = selectedMeal === '早' ? '☀️' : selectedMeal === '午' ? '🧀' : '🌙';
+            const tempFood = {
+                date: today,
+                time: timeStr,
+                desc: `${mealEmoji} ${selectedMeal}餐 · ${desc}`,
+                meal: selectedMeal,
+                tag: '⏳ 分析中...',
+                rawDesc: desc,
+                isAnalyzing: true
+            };
+            data.foods.push(tempFood);
+            saveData(data);
+            renderAll(data);
+
+            // 调用 AI 分析
+            const analysisBox = document.getElementById('analysisBox');
+            analysisBox.innerHTML = '🧀 杰瑞正在分析你的食物...';
+            analysisBox.className = 'analysis-box';
+
+            try {
+                const aiResult = await analyzeFoodWithAI(desc, selectedMeal);
+                // 更新记录
+                const foods = data.foods;
+                const lastIdx = foods.length - 1;
+                if (foods[lastIdx] && foods[lastIdx].isAnalyzing) {
+                    foods[lastIdx].tag = aiResult.tag || '🍽️';
+                    foods[lastIdx].analysis = aiResult.analysis;
+                    foods[lastIdx].isAnalyzing = false;
+                    foods[lastIdx].desc = `${mealEmoji} ${selectedMeal}餐 · ${desc}`;
+                    saveData(data);
+                    renderAll(data);
+                }
+
+                // 显示分析结果
+                analysisBox.innerHTML = `🧀 ${aiResult.display || aiResult.analysis}`;
+                analysisBox.className = 'analysis-box good';
+
+                markCheckin(data);
+                renderAll(data);
+
+            } catch (error) {
+                console.error('AI 分析失败:', error);
+                // 降级：本地规则
+                const localResult = localFoodAnalysis(desc);
+                const foods = data.foods;
+                const lastIdx = foods.length - 1;
+                if (foods[lastIdx] && foods[lastIdx].isAnalyzing) {
+                    foods[lastIdx].tag = localResult.tag;
+                    foods[lastIdx].isAnalyzing = false;
+                    foods[lastIdx].desc = `${mealEmoji} ${selectedMeal}餐 · ${desc}`;
+                    saveData(data);
+                    renderAll(data);
+                }
+                const box2 = document.getElementById('analysisBox');
+                box2.innerHTML = `🧀 ${localResult.display}`;
+                box2.className = 'analysis-box warn';
+                markCheckin(data);
+                renderAll(data);
+            }
+
+            input.value = '';
+            isAnalyzing = false;
+            // 自动取消餐别标记
+            cancelMeal();
+        }
+
+        // ---------- AI 食物分析 ----------
+        async function analyzeFoodWithAI(foodDesc, meal) {
+            const data = getData();
+            const config = getAIConfig(data);
+
+            if (!config.apiKey) {
+                return localFoodAnalysis(foodDesc);
+            }
+
+            const systemPrompt =
+                `你是 Slowly 的杰瑞，一个食物营养分析助手。用户会输入他们吃的食物（可能有地域特色叫法），请拆解这份食物的主要营养构成，并给出简短的饮食建议。
+
+            请按以下格式输出（务必严格遵守）：
+            第一行：用 1-2 个 emoji + 一句话概括主要营养构成
+            第二行开始：具体拆解
+
+            示例输入："两个鸡蛋蘸云南干碟"
+            示例输出：
+            🥩 蛋白质为主 · 优质蛋白 + 适量脂肪
+            • 鸡蛋：优质蛋白质，含蛋黄脂肪
+            • 云南干碟：低热量调味，不影响营养结构
+            • 建议：碳水缺口，可搭配半根玉米或一片全麦面包
+
+            要求：
+            1. 识别地域特色食物（如：云南干碟、东北蘸酱菜、广东早茶点心等）
+            2. 拆解为：蛋白质/脂肪/碳水/蔬菜/调味品
+            3. 输出不超过 6 行
+            4. 语气轻松，带一点杰瑞的风格`;
+
+            const userMsg = `我吃了 ${meal}餐：${foodDesc}，帮我分析一下营养构成。`;
+
+            const result = await callAI(userMsg, systemPrompt, config);
+
+            // 解析结果
+            const lines = result.split('\n').filter(l => l.trim());
+            let tag = '🍽️';
+            let display = result;
+
+            // 尝试提取 tag（第一行的 emoji）
+            const emojiMatch = lines[0]?.match(/^([\u{1F000}-\u{1FFFF}]|🥩|🧈|🌾|🥬|🧀|☕|🍽️)/u);
+            if (emojiMatch) {
+                tag = emojiMatch[0];
+            }
+
+            return { tag, analysis: result, display: result };
+        }
+
+        function localFoodAnalysis(foodDesc) {
+            const t = foodDesc.toLowerCase();
+            let tag = '🍽️';
+            let analysis = '';
+
+            if (t.includes('蛋') || t.includes('肉') || t.includes('鸡') || t.includes('鱼') || t.includes('虾') || t.includes(
+                    '豆腐') || t.includes('奶') || t.includes('豆') || t.includes('蛋白') || t.includes('牛肉') || t.includes('猪肉') ||
+                t.includes('羊肉')) {
+                tag = '🥩 蛋白质';
+                analysis = `🥩 蛋白质为主\n• ${foodDesc} 主要提供优质蛋白质\n• 建议搭配蔬菜和适量碳水`;
+            } else if (t.includes('饭') || t.includes('面') || t.includes('包') || t.includes('玉米') || t.includes('薯') || t
+                .includes('燕麦') || t.includes('米') || t.includes('馒头') || t.includes('饼')) {
+                tag = '🌾 碳水';
+                analysis = `🌾 碳水为主\n• ${foodDesc} 主要提供碳水化合物\n• 建议搭配蛋白质和蔬菜`;
+            } else if (t.includes('蔬菜') || t.includes('菜') || t.includes('黄瓜') || t.includes('番茄') || t.includes('生菜') ||
+                t.includes('菠菜') || t.includes('西兰花') || t.includes('白菜') || t.includes('萝卜')) {
+                tag = '🥬 蔬菜';
+                analysis = `🥬 蔬菜为主\n• ${foodDesc} 富含膳食纤维和维生素\n• 建议搭配蛋白质和碳水`;
+            } else if (t.includes('咖啡') || t.includes('茶') || t.includes('水')) {
+                tag = '☕ 饮品';
+                analysis = `☕ 饮品\n• ${foodDesc} 低热量\n• 注意不要空腹喝太浓的咖啡`;
+            } else if (t.includes('油') || t.includes('炸') || t.includes('煎') || t.includes('烤') || t.includes('肥') || t
+                .includes('五花') || t.includes('黄油')) {
+                tag = '🧈 脂肪';
+                analysis = `🧈 脂肪为主\n• ${foodDesc} 含较多油脂\n• 建议适量食用，搭配蔬菜`;
+            } else {
+                analysis = `🍽️ 混合食物\n• ${foodDesc} 包含多种营养\n• 建议保持均衡，注意份量`;
+            }
+
+            return { tag, display: analysis, analysis };
+        }
+
+        // ---------- AI 通用调用 ----------
+        function getAIConfig(data) {
+            const model = data.model || 'deepseek';
+            let apiUrl = data.baseUrl || '';
+            let apiKey = data.apiKey || '';
+
+            if (!apiUrl) {
+                if (model === 'deepseek') apiUrl = 'https://api.deepseek.com/v1/chat/completions';
+                else if (model === 'qwen') apiUrl = 'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions';
+            }
+
+            return { model, apiUrl, apiKey };
+        }
+
+        async function callAI(userMessage, systemPrompt, config) {
+            const { model, apiUrl, apiKey } = config;
+
+            if (!apiKey) throw new Error('请先配置 API Key');
+
+            const body = {
+                model: model === 'deepseek' ? 'deepseek-chat' : 'qwen-turbo',
+                messages: [
+                    { role: 'system', content: systemPrompt },
+                    { role: 'user', content: userMessage }
+                ],
+                temperature: 0.7,
+                max_tokens: 500,
+            };
+
+            const resp = await fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + apiKey,
+                },
+                body: JSON.stringify(body),
+            });
+
+            if (!resp.ok) {
+                const err = await resp.text();
+                throw new Error('API 请求失败：' + err);
+            }
+
+            const json = await resp.json();
+            return json.choices?.[0]?.message?.content || '杰瑞没听清，能再说一次吗？';
+        }
+
+        // ---------- 情绪急救（AI 对话） ----------
+        let selectedMood = null;
+
+        function openMoodModal() {
+            document.getElementById('moodModal').classList.add('active');
+            document.getElementById('moodReply').innerHTML = '👆 点一个选项，或者直接描述你的感受，杰瑞会用 AI 帮你分析～';
+            document.querySelectorAll('#moodBtnGroup button').forEach(b => b.classList.remove('selected'));
+            document.getElementById('customMoodInput').value = '';
+            selectedMood = null;
+        }
+
+        function closeMoodModal() {
+            document.getElementById('moodModal').classList.remove('active');
+        }
+        document.getElementById('moodModal').addEventListener('click', function(e) {
+            if (e.target === this) closeMoodModal();
+        });
+
+        function selectMood(mood) {
+            document.querySelectorAll('#moodBtnGroup button').forEach(b => b.classList.remove('selected'));
+            event.target.classList.add('selected');
+            selectedMood = mood;
+            document.getElementById('customMoodInput').value = mood;
+            // 自动触发查询
+            askJerry();
+        }
+
+        async function askJerry() {
+            const input = document.getElementById('customMoodInput');
+            const text = input.value.trim();
+            if (!text) {
+                showToast('😅 描述一下你的感受，杰瑞才能帮你呀');
+                return;
+            }
+
+            const replyBox = document.getElementById('moodReply');
+            replyBox.innerHTML = '🧀 杰瑞正在认真思考...';
+
+            const data = getData();
+            const config = getAIConfig(data);
+
+            // 如果没配置 API Key，使用预设回复
+            if (!config.apiKey) {
+                const fallback = getMoodFallback(text);
+                setTimeout(() => {
+                    replyBox.innerHTML = '🧀 ' + fallback;
+                }, 500);
+                return;
+            }
+
+            try {
+                const systemPrompt =
+                    `你是 Slowly 的杰瑞，一个温暖、机灵、有点小幽默的奶酪小助手。用户可能在情绪波动时想通过吃东西来缓解，请你温柔地帮他们拆解当下的真实需求。
+
+                规则：
+                1. 先判断是「饿了」还是「情绪性想吃」
+                2. 如果是饿了 → 建议具体的、简单的食物
+                3. 如果是情绪 → 给一个情绪安抚动作（深呼吸/走一走/喝杯水等）
+                4. 语气温和，带一点杰瑞的俏皮
+                5. 回复不超过 120 字
+                6. 不要心灵鸡汤，要具体、可执行`;
+
+                const userMsg = `我现在有这种感觉：${text}。我该怎么办？`;
+                const result = await callAI(userMsg, systemPrompt, config);
+                replyBox.innerHTML = '🧀 ' + result;
+
+            } catch (error) {
+                console.error('AI 情绪分析失败:', error);
+                const fallback = getMoodFallback(text);
+                replyBox.innerHTML = '🧀 ' + fallback + '\n\n（AI 暂时连不上，这是杰瑞的备用回复）';
+            }
+        }
+
+        function getMoodFallback(text) {
+            const t = text.toLowerCase();
+            if (t.includes('饿') || t.includes('想吃') || t.includes('馋')) {
+                return '唔… 感觉到你在渴望食物。如果真饿了，试试先喝杯温水，等10分钟。如果还饿，吃一小份蛋白质（鸡蛋/鸡胸肉），配点蔬菜。慢慢来，杰瑞陪着你。';
+            } else if (t.includes('烦') || t.includes('躁') || t.includes('气') || t.includes('恼') || t.includes('压力')) {
+                return '嗯… 情绪来了。先别急着吃东西，跟杰瑞做个深呼吸——吸～呼～。现在感觉好一点了吗？如果还是想嚼点什么，试试冰块或者胡萝卜条，让嘴巴忙起来。';
+            } else if (t.includes('无聊') || t.includes('闷') || t.includes('闲')) {
+                return '无聊的时候嘴巴容易寂寞… 要不要起来走一走？或者打开 Slowly 的「练练吧~」找个短跟练？哪怕只动5分钟，心情也会不一样。';
+            } else if (t.includes('习惯') || t.includes('不自觉')) {
+                return '习惯的力量很强大呢。每次想伸手拿零食时，先做一件别的事——比如整理一下桌面，或者给杰瑞发一条消息。慢慢来，旧习惯会一点点被新习惯替代的。';
+            } else {
+                return '唔… 杰瑞感觉到你心里有东西在动。要不我们先一起深呼吸三次？然后问问自己：这一刻，我真正需要的是什么？是食物，还是别的什么？慢慢想，杰瑞不着急。';
+            }
+        }
+
+        // ---------- 渲染引擎 ----------
+        function renderAll(data) {
+            renderCountdown(data);
+            renderFoods(data);
+            renderVideos(data);
+            renderSettings(data);
+            renderCheckin(data);
+            updateMotto();
+
+            if (data.foods && data.foods.length > 0 && !hasCheckedInToday(data)) {
+                markCheckin(data);
+                renderCheckin(data);
+            }
+        }
+
         function renderFoods(data) {
             const container = document.getElementById('foodList');
             const countEl = document.getElementById('foodCount');
@@ -1330,98 +1722,16 @@
             container.innerHTML = sorted.map(f =>
                 `<div class="food-item">
                             <span class="time-tag">${f.time || ''}</span>
-                            <span class="food-desc">${f.desc || ''}</span>
-                            ${f.tag ? `<span class="food-tag">${f.tag}</span>` : ''}
+                            <span class="food-desc">
+                                ${f.meal ? `<span class="meal-tag">${f.meal === '早' ? '☀️' : f.meal === '午' ? '🧀' : '🌙'}${f.meal}</span>` : ''}
+                                ${f.desc || ''}
+                                ${f.isAnalyzing ? ' ⏳' : ''}
+                            </span>
+                            <span class="food-tag">${f.tag || '🍽️'}</span>
                         </div>`
             ).join('');
         }
 
-        function addFood() {
-            const input = document.getElementById('foodInput');
-            const desc = input.value.trim();
-            if (!desc) return;
-            const data = getData();
-            const now = new Date();
-            const timeStr = `${pad(now.getHours())}:${pad(now.getMinutes())}`;
-            const today = getToday();
-            data.foods.push({
-                date: today,
-                time: timeStr,
-                desc: desc,
-                tag: autoTag(desc)
-            });
-            markCheckin(data);
-            saveData(data);
-            input.value = '';
-            renderAll(data);
-            showToast('🧀 已记录，杰瑞给你点赞～');
-        }
-
-        function quickAdd(desc) {
-            document.getElementById('foodInput').value = desc;
-            addFood();
-        }
-
-        function autoTag(desc) {
-            const t = desc.toLowerCase();
-            if (t.includes('蛋') || t.includes('肉') || t.includes('鸡') || t.includes('鱼') || t.includes('虾') || t.includes(
-                    '豆腐') || t.includes('奶') || t.includes('豆')) return '🥩 蛋白';
-            if (t.includes('饭') || t.includes('面') || t.includes('包') || t.includes('玉米') || t.includes('薯') || t.includes(
-                    '燕麦')) return '🌾 碳水';
-            if (t.includes('蔬菜') || t.includes('菜') || t.includes('黄瓜') || t.includes('番茄') || t.includes('生菜') || t
-                .includes('菠菜') || t.includes('西兰花')) return '🥬 蔬菜';
-            if (t.includes('咖啡') || t.includes('茶') || t.includes('水')) return '☕ 饮品';
-            return '🍽️ 其他';
-        }
-
-        function renderAnalysis(data) {
-            const today = getToday();
-            const foods = (data.foods || []).filter(f => f.date === today);
-            const box = document.getElementById('analysisBox');
-            if (foods.length === 0) {
-                box.innerHTML = '💡 记录食物后，杰瑞会帮你看看营养够不够～';
-                box.className = 'analysis-box';
-                return;
-            }
-            const tags = foods.map(f => autoTag(f.desc));
-            const hasProtein = tags.some(t => t.includes('蛋白'));
-            const hasCarb = tags.some(t => t.includes('碳水'));
-            const hasVeg = tags.some(t => t.includes('蔬菜'));
-            let msg = '',
-                cls = 'analysis-box';
-            if (hasProtein && hasCarb && hasVeg) {
-                msg = '🎉 今天营养很均衡！蛋白质、碳水、蔬菜都齐了～';
-                cls += ' good';
-            } else if (hasProtein && hasCarb) {
-                msg = '👍 碳水和蛋白都有了，记得加点绿色蔬菜哦～';
-                cls += ' warn';
-            } else if (hasProtein && hasVeg) {
-                msg = '👍 蛋白和蔬菜不错，今天可以补充一些碳水（玉米/燕麦/饭）～';
-                cls += ' warn';
-            } else if (hasCarb && hasVeg) {
-                msg = '👍 碳水和蔬菜有了，建议补充一些蛋白质（鸡蛋/肉/豆腐）～';
-                cls += ' warn';
-            } else if (hasProtein) {
-                msg = '💪 蛋白质不错，还缺碳水和蔬菜～';
-                cls += ' warn';
-            } else if (hasCarb) {
-                msg = '🌾 碳水有了，今天记得补充蛋白质和蔬菜哦～';
-                cls += ' warn';
-            } else if (hasVeg) {
-                msg = '🥬 蔬菜很好！还需要碳水和蛋白质～';
-                cls += ' warn';
-            } else {
-                msg = '🧐 试试搭配：蛋白+碳水+蔬菜，慢慢来～';
-                cls += ' warn';
-            }
-            if (foods.length < 3 && foods.length > 0) {
-                msg += ' （只记录了' + foods.length + '次，慢慢来）';
-            }
-            box.innerHTML = '🧀 ' + msg;
-            box.className = cls;
-        }
-
-        // ---- 视频 ----
         function renderVideos(data) {
             const grid = document.getElementById('videoGrid');
             const videos = data.videos || [];
@@ -1567,49 +1877,6 @@
             showToast('🗑️ 今日已清空');
         }
 
-        // ---- 情绪急救 ----
-        function openMoodModal() {
-            document.getElementById('moodModal').classList.add('active');
-            document.getElementById('moodReply').innerHTML = '👆 点一个选项，杰瑞帮你分析～';
-            document.querySelectorAll('#moodBtnGroup button').forEach(b => b.classList.remove('selected'));
-            document.getElementById('customMoodInput').value = '';
-        }
-
-        function closeMoodModal() {
-            document.getElementById('moodModal').classList.remove('active');
-        }
-        document.getElementById('moodModal').addEventListener('click', function(e) {
-            if (e.target === this) closeMoodModal();
-        });
-
-        function selectMood(mood) {
-            document.querySelectorAll('#moodBtnGroup button').forEach(b => b.classList.remove('selected'));
-            event.target.classList.add('selected');
-            const replyBox = document.getElementById('moodReply');
-            replyBox.innerHTML = '🧀 杰瑞正在思考...';
-            const replies = {
-                '饿了': '唔… 如果是真的饿了，那就吃一点吧！试试先喝杯温水，等10分钟，如果还饿，就吃一小份蛋白质（鸡蛋/鸡胸肉），配点蔬菜。慢慢吃，杰瑞陪着你～',
-                '馋了': '馋了呀… 是不是想念某种味道了？可能是小时候的回忆在呼唤你。允许自己吃一小口解馋，但记得配上一杯水，慢慢品。如果想吃重口味，试试云南干碟蘸黄瓜～',
-                '情绪': '嗯… 情绪来了。先别急着吃东西，杰瑞陪你做个深呼吸——吸～呼～。现在感觉好一点了吗？如果还是想嚼点什么，试试冰块或者胡萝卜条，让嘴巴忙起来。',
-                '无聊': '无聊的时候嘴巴容易寂寞… 要不要起来走一走？或者打开 Slowly 的「视频百宝箱」找个短跟练？哪怕只动5分钟，心情也会不一样。',
-                '习惯': '习惯的力量很强大呢。每次想伸手拿零食时，先做一件别的事——比如整理一下桌面，或者给杰瑞发一条消息。慢慢来，旧习惯会一点点被新习惯替代的。',
-            };
-            const reply = replies[mood] || '杰瑞也不太确定… 要不你告诉我更多？我试着帮你理一理。';
-            setTimeout(() => { replyBox.innerHTML = '🧀 ' + reply; }, 500);
-        }
-
-        function customMoodQuery() {
-            const input = document.getElementById('customMoodInput');
-            const text = input.value.trim();
-            if (!text) return;
-            const replyBox = document.getElementById('moodReply');
-            replyBox.innerHTML = '🧀 杰瑞正在认真想...';
-            const fallback =
-                `唔… 你说「${text}」的时候，杰瑞感觉到你心里有东西在动。要不我们先一起深呼吸三次？然后问问自己：这一刻，我真正需要的是什么？是食物，还是别的什么？慢慢想，杰瑞不着急。`;
-            setTimeout(() => { replyBox.innerHTML = '🧀 ' + fallback; }, 600);
-            input.value = '';
-        }
-
         // ---------- 云端同步 ----------
         async function initCloud() {
             try {
@@ -1736,17 +2003,14 @@
             toastTimer = setTimeout(() => { el.classList.remove('show'); }, 3000);
         }
 
-        // ---------- 初始化 ----------
+        // ---------- 键盘事件 ----------
         document.addEventListener('DOMContentLoaded', function() {
             const data = getData();
             if (!data.videos) data.videos = getDefaultData().videos;
             if (!data.foods) data.foods = [];
             if (!data.checkins) data.checkins = {};
-            // 兼容旧数据：给没日期的食物补上日期
             data.foods = data.foods.map(f => {
-                if (!f.date) {
-                    f.date = getToday();
-                }
+                if (!f.date) f.date = getToday();
                 return f;
             });
             saveData(data);
@@ -1755,27 +2019,30 @@
             document.getElementById('startTimeInput').value = data.startTime || '09:00';
 
             document.getElementById('foodInput').addEventListener('keydown', function(e) {
-                if (e.key === 'Enter') addFood();
+                if (e.key === 'Enter') recordFood();
             });
+
             document.getElementById('videoSearchInput').addEventListener('keydown', function(e) {
                 if (e.key === 'Enter') filterVideos();
             });
+
             document.getElementById('customMoodInput').addEventListener('keydown', function(e) {
-                if (e.key === 'Enter') customMoodQuery();
+                if (e.key === 'Enter') askJerry();
             });
 
             initCloud();
 
             setInterval(() => {
-                const data = getData();
-                renderCountdown(data);
+                const d = getData();
+                renderCountdown(d);
             }, 30000);
         });
 
         // 暴露全局函数
         window.setStartTime = setStartTime;
-        window.addFood = addFood;
-        window.quickAdd = quickAdd;
+        window.selectMeal = selectMeal;
+        window.cancelMeal = cancelMeal;
+        window.recordFood = recordFood;
         window.filterVideos = filterVideos;
         window.addCustomVideo = addCustomVideo;
         window.removeVideo = removeVideo;
@@ -1787,7 +2054,7 @@
         window.openMoodModal = openMoodModal;
         window.closeMoodModal = closeMoodModal;
         window.selectMood = selectMood;
-        window.customMoodQuery = customMoodQuery;
+        window.askJerry = askJerry;
         window.backupToCloud = backupToCloud;
         window.restoreFromCloud = restoreFromCloud;
         window.renderAll = renderAll;
