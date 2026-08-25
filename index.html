@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>Slowly · 慢慢食光</title>
+    <title>Slowly · 慢食光</title>
     <!-- 腾讯云开发 SDK -->
     <script src="https://static.cloudbase.net/cloudbase-js-sdk/2.28.6/cloudbase.full.js">
     </script>
@@ -20,7 +20,6 @@
 
         body {
             font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
-            /* 明亮奶酪黄，不再肉色 */
             background: #FFEAA7;
             color: #5A4A3A;
             padding: 16px;
@@ -29,7 +28,6 @@
             line-height: 1.6;
             min-height: 100vh;
 
-            /* 孔洞纹理：恰到好处的点缀 */
             background-image:
                 radial-gradient(circle at 6% 15%, rgba(200, 170, 100, 0.18) 30px, transparent 30px),
                 radial-gradient(circle at 90% 70%, rgba(200, 170, 100, 0.14) 36px, transparent 36px),
@@ -55,72 +53,23 @@
             gap: 10px;
         }
 
-        /* 🧀 立体奶酪块（纯 CSS 3D） */
-        .cheese-cube {
-            width: 52px;
-            height: 44px;
-            background: linear-gradient(145deg, #FFD93D, #F5C842);
-            border-radius: 6px 18px 6px 12px;
-            position: relative;
-            flex-shrink: 0;
-            transform: rotate(-3deg);
+        .cheese-icon {
+            font-size: 40px;
+            line-height: 1;
+            filter: drop-shadow(0 4px 8px rgba(200, 170, 80, 0.25));
+            transform: rotate(-4deg);
             transition: transform 0.3s ease;
-            box-shadow:
-                4px 6px 0 #D4A84A,
-                0 4px 12px rgba(200, 170, 80, 0.25);
+            cursor: default;
+            flex-shrink: 0;
         }
-        .cheese-cube:hover {
-            transform: rotate(0deg) scale(1.04);
-        }
-
-        /* 正面孔洞 */
-        .cheese-cube .hole {
-            position: absolute;
-            border-radius: 50%;
-            background: radial-gradient(circle at 40% 35%, rgba(180, 140, 70, 0.20), rgba(150, 110, 50, 0.30));
-            box-shadow: inset 2px 3px 6px rgba(120, 80, 40, 0.20);
-        }
-        .cheese-cube .h1 {
-            width: 14px;
-            height: 12px;
-            top: 8px;
-            left: 10px;
-            transform: rotate(-6deg);
-        }
-        .cheese-cube .h2 {
-            width: 10px;
-            height: 9px;
-            bottom: 10px;
-            right: 8px;
-            transform: rotate(10deg);
-        }
-        .cheese-cube .h3 {
-            width: 7px;
-            height: 6px;
-            top: 24px;
-            left: 30px;
-            transform: rotate(4deg);
-        }
-
-        /* 右侧厚边（立体感） */
-        .cheese-cube::after {
-            content: '';
-            position: absolute;
-            right: -6px;
-            top: 4px;
-            width: 8px;
-            height: 32px;
-            background: linear-gradient(180deg, #E8B84A, #C8983A);
-            border-radius: 0 4px 4px 0;
-            transform: skewY(-6deg);
-            box-shadow: inset -1px -1px 0 rgba(160, 120, 60, 0.2);
-            opacity: 0.85;
+        .cheese-icon:hover {
+            transform: rotate(0deg) scale(1.05);
         }
 
         .app-title {
             font-size: 26px;
             font-weight: 600;
-            color: #C49A5A;
+            color: #D4A06A;
             letter-spacing: 1.5px;
             display: flex;
             align-items: center;
@@ -161,7 +110,6 @@
             }
         }
 
-        /* 座右铭——活泼杰瑞风格 */
         .daily-motto {
             font-size: 13px;
             color: #A68A6A;
@@ -296,7 +244,6 @@
             transform: none;
             box-shadow: none;
         }
-        /* 点击查看当天的气泡提示 */
         .checkin-dot .day-tooltip {
             display: none;
             position: absolute;
@@ -418,12 +365,12 @@
             box-shadow: 0 4px 12px rgba(180, 150, 100, 0.12);
         }
         .btn-primary {
-            background: #F5C842;
-            color: #5A4A3A;
-            box-shadow: 0 4px 12px rgba(245, 200, 66, 0.25);
+            background: #D4A06A;
+            color: #FFFDF5;
+            box-shadow: 0 4px 12px rgba(212, 160, 106, 0.25);
         }
         .btn-primary:hover {
-            background: #E8B84A;
+            background: #c4905a;
             transform: translateY(-2px);
         }
         .btn-danger {
@@ -484,7 +431,7 @@
             padding: 10px 16px;
             margin-top: 10px;
             font-size: 14px;
-            border-left: 4px solid #F5C842;
+            border-left: 4px solid #D4A06A;
         }
         .analysis-box.good {
             border-left-color: #7EB87A;
@@ -539,7 +486,7 @@
         .modal-title {
             font-size: 20px;
             font-weight: 600;
-            color: #E8B84A;
+            color: #D4A06A;
             margin-bottom: 6px;
         }
         .modal-sub {
@@ -566,12 +513,12 @@
         }
         .mood-btn-group button:hover {
             background: #f0dcc8;
-            border-color: #F5C842;
+            border-color: #D4A06A;
         }
         .mood-btn-group button.selected {
-            background: #F5C842;
-            border-color: #F5C842;
-            color: #5A4A3A;
+            background: #D4A06A;
+            border-color: #D4A06A;
+            color: #FFFDF5;
         }
         .ai-reply-box {
             background: #fcf3e3;
@@ -611,7 +558,7 @@
             margin-right: 10px;
         }
         .video-item .v-link {
-            color: #E8B84A;
+            color: #D4A06A;
             text-decoration: none;
             font-weight: 500;
             font-size: 13px;
@@ -757,33 +704,8 @@
             .app-title {
                 font-size: 22px;
             }
-            .cheese-cube {
-                width: 40px;
-                height: 34px;
-            }
-            .cheese-cube .h1 {
-                width: 10px;
-                height: 9px;
-                top: 6px;
-                left: 8px;
-            }
-            .cheese-cube .h2 {
-                width: 7px;
-                height: 6px;
-                bottom: 8px;
-                right: 6px;
-            }
-            .cheese-cube .h3 {
-                width: 5px;
-                height: 4px;
-                top: 18px;
-                left: 20px;
-            }
-            .cheese-cube::after {
-                right: -5px;
-                top: 3px;
-                width: 6px;
-                height: 26px;
+            .cheese-icon {
+                font-size: 32px;
             }
             .countdown-number {
                 font-size: 30px;
@@ -839,7 +761,7 @@
             border-radius: 10px;
         }
 
-        /* ===== 打卡详情弹窗（点击日期查看当天记录） ===== */
+        /* ===== 打卡详情弹窗 ===== */
         .day-detail-overlay {
             display: none;
             position: fixed;
@@ -885,7 +807,7 @@
         .day-detail-title {
             font-size: 18px;
             font-weight: 600;
-            color: #E8B84A;
+            color: #D4A06A;
             margin-bottom: 4px;
         }
         .day-detail-sub {
@@ -929,14 +851,9 @@
     <!-- ===== 顶部 ===== -->
     <div class="app-header">
         <div class="title-group">
-            <!-- 立体奶酪块 -->
-            <div class="cheese-cube">
-                <div class="hole h1"></div>
-                <div class="hole h2"></div>
-                <div class="hole h3"></div>
-            </div>
+            <span class="cheese-icon" onmouseover="this.style.transform='rotate(0deg) scale(1.05)'" onmouseout="this.style.transform='rotate(-4deg)'">🧀</span>
             <div class="app-title">
-                Slowly <small>· 慢慢食光</small>
+                Slowly <small>· 慢食光</small>
                 <span class="sync-badge" id="syncBadge">☁️ 云端</span>
             </div>
         </div>
@@ -1098,7 +1015,7 @@
         </div>
     </div>
 
-    <!-- ===== 打卡详情弹窗（点击日期查看当天记录） ===== -->
+    <!-- ===== 打卡详情弹窗 ===== -->
     <div class="day-detail-overlay" id="dayDetailOverlay">
         <div class="day-detail-box">
             <button class="close-btn" onclick="closeDayDetail()">✕</button>
@@ -1217,7 +1134,6 @@
             return null;
         }
 
-        // 获取某天的食物记录
         function getFoodsForDate(data, dateStr) {
             const foods = data.foods || [];
             return foods.filter(f => f.date === dateStr);
@@ -1259,7 +1175,6 @@
                 if (isChecked) cls += ' done';
                 if (isToday && !isFuture) cls += ' today';
 
-                // 里程碑标记
                 let label = '';
                 if (isChecked) {
                     const checkinDates = Object.keys(data.checkins || {}).sort();
@@ -1273,7 +1188,6 @@
                     else label = '✓';
                 }
 
-                // 悬停提示：显示当天食物条数
                 const tipText = foodCount > 0 ? `${dateStr} · ${foodCount}条记录` : `${dateStr} · 无记录`;
                 const clickAttr = `onclick="showDayDetail('${dateStr}')"`;
 
@@ -1317,7 +1231,6 @@
         function closeDayDetail() {
             document.getElementById('dayDetailOverlay').classList.remove('active');
         }
-        // 点击外部关闭
         document.getElementById('dayDetailOverlay').addEventListener('click', function(e) {
             if (e.target === this) closeDayDetail();
         });
@@ -1331,7 +1244,6 @@
             renderSettings(data);
             renderCheckin(data);
             updateMotto();
-            // 自动打卡
             if (data.foods && data.foods.length > 0 && !hasCheckedInToday(data)) {
                 markCheckin(data);
                 renderCheckin(data);
@@ -1403,7 +1315,6 @@
             const container = document.getElementById('foodList');
             const countEl = document.getElementById('foodCount');
             const foods = data.foods || [];
-            // 只显示今天的
             const today = getToday();
             const todayFoods = foods.filter(f => f.date === today);
             countEl.textContent = todayFoods.length + ' 条';
@@ -1648,7 +1559,6 @@
             const data = getData();
             const today = getToday();
             data.foods = (data.foods || []).filter(f => f.date !== today);
-            // 不清除打卡
             saveData(data);
             renderAll(data);
             showToast('🗑️ 今日已清空');
@@ -1832,7 +1742,6 @@
             // 兼容旧数据：给没日期的食物补上日期
             data.foods = data.foods.map(f => {
                 if (!f.date) {
-                    // 尝试从已有的其他字段推断，否则用当天
                     f.date = getToday();
                 }
                 return f;
