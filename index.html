@@ -5,59 +5,134 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>Slowly · 慢慢食光</title>
     <!-- 腾讯云开发 SDK -->
-    <script src="https://static.cloudbase.net/cloudbase-js-sdk/2.28.6/cloudbase.full.js"></script>
+    <script src="https://static.cloudbase.net/cloudbase-js-sdk/2.28.6/cloudbase.full.js">
+    </script>
     <style>
-        /* ===== 奶酪主题 · 暖黄 + 孔洞 ===== */
+        /* ================================================================
+               奶酪主题 · 强化版 · 真 · 奶酪黄
+               ================================================================ */
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
+
         body {
             font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
-            background: #FCF3E3;
-            /* 奶酪基底 */
+            /* 主背景：真正的奶酪黄 */
+            background: #F9E8C9;
             color: #5A4A3A;
             padding: 20px;
             max-width: 700px;
             margin: 0 auto;
             line-height: 1.6;
-            /* 孔洞纹理：径向渐变模拟奶酪孔洞 */
-            background-image:
-                radial-gradient(circle at 8% 15%, rgba(212, 160, 106, 0.15) 12px, transparent 12px),
-                radial-gradient(circle at 85% 72%, rgba(212, 160, 106, 0.12) 18px, transparent 18px),
-                radial-gradient(circle at 22% 88%, rgba(212, 160, 106, 0.10) 10px, transparent 10px),
-                radial-gradient(circle at 92% 25%, rgba(212, 160, 106, 0.08) 14px, transparent 14px),
-                radial-gradient(circle at 45% 45%, rgba(212, 160, 106, 0.06) 20px, transparent 20px);
-            background-color: #FCF3E3;
             min-height: 100vh;
+
+            /* 孔洞纹理：更大、更深、更密集 */
+            background-image:
+                radial-gradient(circle at 5% 12%, rgba(200, 160, 100, 0.20) 28px, transparent 28px),
+                radial-gradient(circle at 88% 68%, rgba(200, 160, 100, 0.18) 34px, transparent 34px),
+                radial-gradient(circle at 25% 90%, rgba(200, 160, 100, 0.14) 22px, transparent 22px),
+                radial-gradient(circle at 94% 22%, rgba(200, 160, 100, 0.12) 26px, transparent 26px),
+                radial-gradient(circle at 48% 40%, rgba(200, 160, 100, 0.10) 40px, transparent 40px),
+                radial-gradient(circle at 72% 85%, rgba(200, 160, 100, 0.16) 18px, transparent 18px),
+                radial-gradient(circle at 15% 55%, rgba(200, 160, 100, 0.08) 30px, transparent 30px);
+            background-color: #F9E8C9;
         }
 
+        /* ===== 顶部：标题 + 奶酪切面 ===== */
         .app-header {
             display: flex;
             justify-content: space-between;
-            align-items: baseline;
-            margin-bottom: 8px;
+            align-items: center;
+            margin-bottom: 12px;
             flex-wrap: wrap;
+            gap: 6px;
         }
+
+        .title-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* 🧀 奶酪切面（纯 CSS 立体块） */
+        .cheese-block {
+            width: 52px;
+            height: 44px;
+            background: linear-gradient(145deg, #F5D49A, #E8B86D);
+            border-radius: 6px 20px 6px 12px;
+            position: relative;
+            box-shadow:
+                4px 6px 0 #C49A5A,
+                inset -2px -4px 0 rgba(180, 130, 70, 0.2),
+                inset 2px 2px 0 rgba(255, 220, 160, 0.6);
+            flex-shrink: 0;
+            transform: rotate(-4deg);
+            transition: transform 0.3s ease;
+        }
+        .cheese-block:hover {
+            transform: rotate(0deg) scale(1.04);
+        }
+        /* 切面顶部的孔洞 */
+        .cheese-block .hole {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle at 40% 35%, rgba(200, 160, 100, 0.25), rgba(160, 120, 70, 0.35));
+            box-shadow: inset 2px 3px 6px rgba(120, 80, 40, 0.25);
+        }
+        .cheese-block .hole1 {
+            width: 14px;
+            height: 12px;
+            top: 8px;
+            left: 10px;
+            transform: rotate(-8deg);
+        }
+        .cheese-block .hole2 {
+            width: 10px;
+            height: 9px;
+            bottom: 10px;
+            right: 8px;
+            transform: rotate(12deg);
+        }
+        .cheese-block .hole3 {
+            width: 7px;
+            height: 6px;
+            top: 22px;
+            left: 28px;
+            transform: rotate(4deg);
+        }
+        /* 切面的“侧面”效果（右侧厚边） */
+        .cheese-block::after {
+            content: '';
+            position: absolute;
+            right: -6px;
+            top: 4px;
+            width: 8px;
+            height: 32px;
+            background: linear-gradient(180deg, #D4A06A, #B8895A);
+            border-radius: 0 4px 4px 0;
+            transform: skewY(-6deg);
+            box-shadow: inset -1px -1px 0 rgba(160, 120, 70, 0.3);
+            opacity: 0.8;
+        }
+
         .app-title {
             font-size: 28px;
             font-weight: 600;
-            color: #D4A06A;
+            color: #C49A5A;
             letter-spacing: 2px;
             display: flex;
             align-items: center;
-            gap: 6px;
-        }
-        .app-title .cheese-icon {
-            font-size: 30px;
+            gap: 4px;
         }
         .app-title small {
             font-size: 16px;
             font-weight: 400;
-            color: #C4A882;
-            margin-left: 4px;
+            color: #B8A08A;
         }
+
         .sync-badge {
             font-size: 11px;
             color: #fff;
@@ -68,7 +143,7 @@
             cursor: pointer;
             transition: all 0.3s;
             display: inline-block;
-            margin-left: 6px;
+            margin-left: 4px;
         }
         .sync-badge.offline {
             background: #b08a6a;
@@ -88,56 +163,64 @@
         }
 
         .daily-motto {
-            font-size: 14px;
+            font-size: 13px;
             color: #B8A08A;
-            background: #FFFDF5;
+            background: rgba(255, 247, 232, 0.7);
             padding: 4px 16px;
             border-radius: 30px;
             border: 1px solid #f0dcc8;
             font-style: italic;
-            box-shadow: inset 0 1px 4px rgba(212, 160, 106, 0.08);
+            backdrop-filter: blur(4px);
+            white-space: nowrap;
         }
 
-        /* ===== 奶酪卡片 ===== */
+        /* ===== 卡片 · 厚切奶酪 ===== */
         .card {
-            background: #FFFDF5;
-            border-radius: 24px;
-            padding: 18px 20px;
+            background: #FFF7E8;
+            border-radius: 28px 28px 24px 24px;
+            padding: 18px 20px 22px 20px;
             margin-bottom: 16px;
             border: 1px solid #f0dcc8;
-            box-shadow: 0 4px 16px rgba(212, 160, 106, 0.10), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+            /* 双层阴影：厚切感 */
+            box-shadow:
+                0 6px 0 #E0C8A8,
+                0 8px 24px rgba(180, 150, 100, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8);
             position: relative;
             transition: 0.2s;
         }
-        /* 卡片上的“孔洞”装饰（纯CSS） */
+        /* 卡片内部孔洞装饰（更深） */
         .card::after {
             content: '';
             position: absolute;
-            top: 12px;
-            right: 18px;
-            width: 24px;
-            height: 18px;
+            top: 16px;
+            right: 22px;
+            width: 32px;
+            height: 24px;
             border-radius: 50%;
-            background: rgba(212, 160, 106, 0.10);
+            background: radial-gradient(circle at 40% 30%, rgba(200, 160, 100, 0.15), rgba(180, 140, 90, 0.25));
+            box-shadow: inset 2px 3px 8px rgba(160, 120, 70, 0.15);
             pointer-events: none;
         }
         .card::before {
             content: '';
             position: absolute;
-            bottom: 20px;
-            left: 30px;
-            width: 14px;
-            height: 12px;
+            bottom: 24px;
+            left: 36px;
+            width: 20px;
+            height: 16px;
             border-radius: 50%;
-            background: rgba(212, 160, 106, 0.07);
+            background: radial-gradient(circle at 50% 40%, rgba(200, 160, 100, 0.10), rgba(180, 140, 90, 0.18));
+            box-shadow: inset 1px 2px 6px rgba(160, 120, 70, 0.12);
             pointer-events: none;
         }
-        /* 某些卡片不要孔洞装饰 */
+        /* 某些卡片不需要孔洞 */
         .card.no-hole::before,
         .card.no-hole::after {
             display: none;
         }
 
+        /* 卡片标题 */
         .card-title {
             font-size: 16px;
             font-weight: 600;
@@ -178,28 +261,30 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 12px;
+            font-size: 11px;
             transition: 0.2s;
             border: 1px solid #e0d0c0;
             color: #b8a08a;
         }
         .checkin-dot.done {
-            background: #D4A06A;
-            border-color: #c4905a;
+            background: #E8B86D;
+            border-color: #d4a06a;
             color: #fff;
+            box-shadow: 0 2px 8px rgba(232, 184, 109, 0.25);
         }
         .checkin-dot.today {
-            border: 2px solid #D4A06A;
-            box-shadow: 0 0 0 2px rgba(212, 160, 106, 0.2);
+            border: 2px solid #E8B86D;
+            box-shadow: 0 0 0 3px rgba(232, 184, 109, 0.15);
         }
         .checkin-dot.milestone {
-            background: #e8b86d;
+            background: #E8B86D;
             border-color: #d4a06a;
             color: #fff;
             font-size: 14px;
+            box-shadow: 0 2px 12px rgba(232, 184, 109, 0.3);
         }
         .checkin-dot.future {
-            opacity: 0.4;
+            opacity: 0.35;
         }
 
         .checkin-stats {
@@ -212,7 +297,7 @@
         }
         .checkin-stats .streak {
             font-weight: 700;
-            color: #D4A06A;
+            color: #E8B86D;
             font-size: 18px;
         }
         .milestone-badge {
@@ -221,6 +306,7 @@
             margin-left: 4px;
         }
 
+        /* ===== 倒计时 ===== */
         .countdown-box {
             display: flex;
             align-items: baseline;
@@ -230,8 +316,9 @@
         .countdown-number {
             font-size: 40px;
             font-weight: 700;
-            color: #D4A06A;
+            color: #E8B86D;
             line-height: 1.2;
+            text-shadow: 0 2px 8px rgba(232, 184, 109, 0.15);
         }
         .countdown-label {
             font-size: 15px;
@@ -249,10 +336,11 @@
             color: #7A5C3A;
         }
         .countdown-status.danger {
-            background: #D4A06A;
+            background: #E8B86D;
             color: #FFFDF5;
         }
 
+        /* ===== 输入框 & 按钮 ===== */
         .input-row {
             display: flex;
             gap: 8px;
@@ -274,8 +362,8 @@
         }
         .input-row input:focus,
         .input-row select:focus {
-            border-color: #D4A06A;
-            box-shadow: 0 0 0 3px rgba(212, 160, 106, 0.12);
+            border-color: #E8B86D;
+            box-shadow: 0 0 0 4px rgba(232, 184, 109, 0.12);
         }
 
         .btn {
@@ -291,14 +379,17 @@
         }
         .btn:hover {
             background: #e8c8b0;
-            transform: translateY(-1px);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(180, 150, 100, 0.15);
         }
         .btn-primary {
-            background: #D4A06A;
+            background: #E8B86D;
             color: #FFFDF5;
+            box-shadow: 0 4px 12px rgba(232, 184, 109, 0.25);
         }
         .btn-primary:hover {
-            background: #c4905a;
+            background: #d4a06a;
+            transform: translateY(-2px);
         }
         .btn-danger {
             background: #c0392b;
@@ -320,6 +411,7 @@
         }
         .btn-outline:hover {
             background: #fff8f0;
+            transform: translateY(-2px);
         }
 
         /* ===== 食物列表 ===== */
@@ -357,7 +449,7 @@
             padding: 12px 16px;
             margin-top: 10px;
             font-size: 14px;
-            border-left: 4px solid #D4A06A;
+            border-left: 4px solid #E8B86D;
         }
         .analysis-box.good {
             border-left-color: #7EB87A;
@@ -412,7 +504,7 @@
         .modal-title {
             font-size: 20px;
             font-weight: 600;
-            color: #D4A06A;
+            color: #E8B86D;
             margin-bottom: 6px;
         }
         .modal-sub {
@@ -439,11 +531,11 @@
         }
         .mood-btn-group button:hover {
             background: #f0dcc8;
-            border-color: #D4A06A;
+            border-color: #E8B86D;
         }
         .mood-btn-group button.selected {
-            background: #D4A06A;
-            border-color: #D4A06A;
+            background: #E8B86D;
+            border-color: #E8B86D;
             color: #FFFDF5;
         }
         .ai-reply-box {
@@ -484,7 +576,7 @@
             margin-right: 10px;
         }
         .video-item .v-link {
-            color: #D4A06A;
+            color: #E8B86D;
             text-decoration: none;
             font-weight: 500;
             font-size: 13px;
@@ -629,6 +721,34 @@
             .app-title {
                 font-size: 22px;
             }
+            .cheese-block {
+                width: 40px;
+                height: 34px;
+            }
+            .cheese-block .hole1 {
+                width: 10px;
+                height: 9px;
+                top: 6px;
+                left: 8px;
+            }
+            .cheese-block .hole2 {
+                width: 7px;
+                height: 6px;
+                bottom: 8px;
+                right: 6px;
+            }
+            .cheese-block .hole3 {
+                width: 5px;
+                height: 4px;
+                top: 18px;
+                left: 20px;
+            }
+            .cheese-block::after {
+                right: -5px;
+                top: 3px;
+                width: 6px;
+                height: 26px;
+            }
             .countdown-number {
                 font-size: 30px;
             }
@@ -652,12 +772,31 @@
             .card::before {
                 display: none;
             }
+            .daily-motto {
+                font-size: 11px;
+                padding: 2px 12px;
+                white-space: nowrap;
+            }
         }
+
+        @media (max-width: 420px) {
+            .app-header {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 4px;
+            }
+            .daily-motto {
+                text-align: center;
+                white-space: normal;
+                font-size: 12px;
+            }
+        }
+
         ::-webkit-scrollbar {
             width: 4px;
         }
         ::-webkit-scrollbar-track {
-            background: #fcf3e3;
+            background: #f9e8c9;
         }
         ::-webkit-scrollbar-thumb {
             background: #f0dcc8;
@@ -667,12 +806,18 @@
 </head>
 <body>
 
-    <!-- ===== 顶部 ===== -->
+    <!-- ===== 顶部：标题 + 奶酪切面 ===== -->
     <div class="app-header">
-        <div class="app-title">
-            <span class="cheese-icon">🧀</span>
-            Slowly <small>· 慢慢食光</small>
-            <span class="sync-badge" id="syncBadge">☁️ 云端</span>
+        <div class="title-group">
+            <div class="cheese-block">
+                <div class="hole hole1"></div>
+                <div class="hole hole2"></div>
+                <div class="hole hole3"></div>
+            </div>
+            <div class="app-title">
+                Slowly <small>· 慢慢食光</small>
+                <span class="sync-badge" id="syncBadge">☁️ 云端</span>
+            </div>
         </div>
         <div class="daily-motto" id="dailyMotto">🌱 今天也慢慢来，好不好？</div>
     </div>
@@ -837,7 +982,7 @@
 
     <script>
         // ================================================================
-        //  Slowly · 奶酪版 · 杰瑞陪伴
+        //  Slowly · 奶酪强化版 · 杰瑞陪伴
         //  数据存储在 localStorage，键名 'slowly_data'
         //  腾讯云环境 ID: deepseek-chat-d5gg0748z3b9dfe24
         // ================================================================
@@ -866,8 +1011,7 @@
                 model: 'deepseek',
                 apiKey: '',
                 baseUrl: '',
-                // 打卡数据
-                checkins: {}, // { '2026-08-25': true }
+                checkins: {},
                 updateTime: new Date().toISOString()
             };
         }
@@ -920,7 +1064,6 @@
             const checkins = data.checkins || {};
             let streak = 0;
             const d = new Date();
-            // 从今天往前数
             for (let i = 0; i < 400; i++) {
                 const dateStr = d.toISOString().slice(0, 10);
                 if (checkins[dateStr]) {
@@ -955,7 +1098,6 @@
                 document.getElementById('milestoneBadge').textContent = '';
             }
 
-            // 显示最近 30 天
             const days = [];
             const d = new Date();
             for (let i = 29; i >= 0; i--) {
@@ -975,24 +1117,19 @@
                 if (isChecked) cls += ' done';
                 if (isToday && !isFuture) cls += ' today';
 
-                // 里程碑标记（仅对已打卡的日期）
                 let label = '';
                 if (isChecked) {
-                    const dayOfYear = Math.floor((day - new Date(day.getFullYear(), 0, 0)) / (24 * 60 * 60 * 1000));
-                    // 在特殊天数显示标记
-                    if (streak >= 365 && dayOfYear === 365) label = '👑';
-                    else if (streak >= 180 && dayOfYear === 180) label = '❤️';
-                    else if (streak >= 30 && dayOfYear === 30) label = '🌟';
-                    else if (streak >= 7 && dayOfYear === 7) label = '⭐';
-                    // 或者显示序号
-                    if (!label && isChecked) {
-                        const checkinDates = Object.keys(data.checkins || {}).sort();
-                        const idx2 = checkinDates.indexOf(dateStr);
-                        if (idx2 >= 0 && (idx2 + 1) % 7 === 0) label = '⭐';
-                    }
+                    const checkinDates = Object.keys(data.checkins || {}).sort();
+                    const idx2 = checkinDates.indexOf(dateStr);
+                    const dayNum = idx2 + 1;
+                    if (dayNum === 365) label = '👑';
+                    else if (dayNum === 180) label = '❤️';
+                    else if (dayNum === 30) label = '🌟';
+                    else if (dayNum === 7) label = '⭐';
+                    else if (dayNum % 7 === 0 && dayNum > 0) label = '⭐';
+                    else label = '✓';
                 }
-
-                return `<div class="${cls}" title="${dateStr}${isChecked ? ' ✅' : ''}">${label || (isChecked ? '✓' : '·')}</div>`;
+                return `<div class="${cls}" title="${dateStr}${isChecked ? ' ✅' : ''}">${label || '·'}</div>`;
             }).join('');
         }
 
@@ -1005,7 +1142,6 @@
             renderSettings(data);
             renderCheckin(data);
             updateMotto();
-            // 自动打卡（如果今天有食物记录但没有打卡）
             if (data.foods && data.foods.length > 0 && !hasCheckedInToday(data)) {
                 markCheckin(data);
                 renderCheckin(data);
@@ -1101,7 +1237,6 @@
             const now = new Date();
             const timeStr = `${pad(now.getHours())}:${pad(now.getMinutes())}`;
             data.foods.push({ time: timeStr, desc: desc, tag: autoTag(desc) });
-            // 自动打卡
             markCheckin(data);
             saveData(data);
             input.value = '';
